@@ -1,0 +1,16 @@
+{
+  "app": {
+    "title": "Tuyên Hóa Số",
+    "headerTitle": "Tuyên Hóa Số",
+    "headerColor": "#1646C8",
+    "textColor": "white",
+    "leftButton": "none",
+    "statusBar": "transparent",
+    "actionBarHidden": true,
+    "hideAndroidBottomNavigationBar": true,
+    "hideIOSSafeAreaBottom": true
+  },
+  "listCSS": [],
+  "listSyncJS": [],
+  "listAsyncJS": []
+}

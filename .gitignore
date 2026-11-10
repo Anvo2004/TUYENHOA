@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.local
+*.log
+www/
+dist/
+.zmp/
+
+Backend/media/
+Backend/public/images/
+
+# File khoa tam cua Word khi dang mo tai lieu
+~$*
+
+# Bộ thiết kế gốc (ảnh, HTML, nguồn) — tham chiếu cục bộ, không commit
+TuyenHoaSo-XanhDuong/
