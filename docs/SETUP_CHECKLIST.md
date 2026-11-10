@@ -101,9 +101,12 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
   nhóm "Bộ dữ liệu mở" (mô tả, định dạng ở ô Badge, link file ở href).
 - [ ] Danh mục thủ tục (`seed-tthc.js` là danh mục chung — rà soát theo xã),
   lịch y tế, lịch chi trả trợ cấp, thông báo: cán bộ nhập qua AdminWeb.
-- [ ] Kỹ năng PCTT: ảnh nằm trên Cloudinary của dự án Trà Liên
-  (`data/pctt-skills.js`), video ở `Backend/media/pctt-videos/` (ngoài git) —
-  chép thư mục media sang VPS Tuyên Hóa; nên tải lại ảnh lên Cloudinary riêng.
+- [x] Kỹ năng PCTT — video: đã chép `Backend/media/` (14 video, 166 MB) từ
+  `/var/www/tralien` sang `/var/www/tuyenhoa` (10/11/2026). Thư mục nằm ngoài
+  git: deploy KHÔNG được xoá; máy/VPS mới phải chép lại.
+- [ ] Kỹ năng PCTT — ảnh (57 ảnh) vẫn trỏ Cloudinary của dự án Trà Liên
+  (`data/pctt-skills.js`), hiện xem được; nên tải về VPS/Cloudinary riêng để
+  không phụ thuộc tài khoản xã khác.
 
 ## 6. AI
 
