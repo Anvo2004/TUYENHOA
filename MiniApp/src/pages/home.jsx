@@ -74,7 +74,7 @@ const HomePage = () => {
               <span>Dân số (người)</span>
             </div>
             <div className="th-stat">
-              <strong>{danSo.soThon != null ? fmtInt(danSo.soThon) : "—"}</strong>
+              <strong>{danSo.soThon ? fmtInt(danSo.soThon) : "—"}</strong>
               <span>Thôn</span>
             </div>
             <div className="th-stat">

@@ -36,8 +36,11 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
   rồi `npm run build` (xem cảnh báo trong `CLAUDE.md`).
 - [x] VPS: thư mục `/var/www/tuyenhoa`, PM2 `tuyenhoa` (MiniApp) và
   `tuyenhoa-backend` — khớp `.github/workflows/deploy.yml`. Cấu hình Nginx + SSL.
-- [x] MongoDB Atlas: cluster `tuyenhoa.mm1qkvg.mongodb.net`, database `tuyenhoa`
-  → `MONGO_URI` (chỉ ở `.env` trên VPS). `JWT_SECRET` sinh ngẫu nhiên.
+- [x] MongoDB Atlas: project **TuyenHoa** (org "Võ's Org"), cluster
+  `tuyenhoa.ufk5ak4.mongodb.net`, user `annguyen14032004_db_user`, database
+  `tuyenhoa` → `MONGO_URI` (chỉ ở `.env` trên VPS). IP Access List đã có
+  `123.30.48.104`. `JWT_SECRET` sinh ngẫu nhiên. Đã seed (10/11/2026): admin,
+  6 lĩnh vực, DanSo/SiteInfo, AppLink, 8 TTHC mẫu.
 - [x] Ảnh tải lên lưu ra đĩa VPS (`Backend/public/images/`, không cấu hình
   Cloudinary). Token Zalo OA lưu trong MongoDB (collection `Setting`), Backend
   tự làm mới trước khi hết hạn — KHÔNG chạy Backend thứ hai (máy local) với
@@ -84,7 +87,7 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
 
 ## 5. Nội dung & liên kết (seed + AdminWeb)
 
-- [ ] `node Backend/scripts/seed.js` — tài khoản `admin / Admin@123` (đổi ngay)
+- [x] `node Backend/scripts/seed.js` — tài khoản `admin / Admin@123` (**đổi ngay**)
   + 6 lĩnh vực phản ánh theo bộ thiết kế.
 - [ ] `node Backend/scripts/seed-site-content.js` — DanSo, SiteInfo (liên hệ
   trống), Du lịch/Văn hóa trống (không mang nội dung xã cũ).
