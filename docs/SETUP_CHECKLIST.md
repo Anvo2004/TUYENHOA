@@ -60,8 +60,9 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
   cho phép gọi API) — thiếu thì Mini App thật không gọi được Backend.
 - [x] **Zalo app/OA**: `ZALO_APP_ID` (3963230990847588986), `ZALO_APP_SECRET`,
   `ZALO_OA_TOKEN`, `ZALO_REFRESH_TOKEN` — đã điền trong `.env` trên VPS.
-- [ ] `ZALO_OA_ID` (nút Quan tâm OA ở tab Cá nhân) và `ZALO_OA_SECRET_KEY`
-  (xác thực webhook) — chưa có.
+- [x] `ZALO_OA_ID` = `2122960456450113020` (OA "UBND xã Tuyên Hóa", lấy qua API
+  `oa/getoa` ngày 10/11/2026) — nút Quan tâm OA ở tab Cá nhân.
+- [ ] `ZALO_OA_SECRET_KEY` (xác thực chữ ký webhook OA) — chưa có, không bắt buộc.
 - [ ] Thẻ `zalo-platform-site-verification` cho domain API: lấy mã mới trong
   Zalo for Developers, dán vào `Backend/src/app.js` (đang là comment TODO).
 - [ ] Quyền "Số điện thoại" trong Mini App Console (tab Cá nhân xin SĐT).
