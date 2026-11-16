@@ -1,6 +1,6 @@
 // Cập nhật lưới "Tiện ích" Trang chủ trên DB đang chạy (seed-app-links.js bỏ qua
 // section đã có dữ liệu) theo yêu cầu xã 16/11/2026:
-//   - Bỏ OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát.
+//   - Bỏ OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát, Học AI.
 //   - Gán link "Học vụ số" (lấy từ ECON_LINKS trong seed-app-links.js).
 //   - Đánh lại thứ tự từng nhóm gov / econ cho liền mạch.
 // An toàn để chạy lại. Chạy trên VPS: cd Backend && node scripts/update-home-links.js
@@ -9,7 +9,7 @@ const config = require("../src/config");
 const AppLink = require("../src/models/AppLink");
 const { ECON_LINKS } = require("./seed-app-links");
 
-const REMOVED = ["OCOP", "BHXH", "Mã số thuế", "Cổng dữ liệu", "Camera an ninh", "Khảo sát"];
+const REMOVED = ["OCOP", "BHXH", "Mã số thuế", "Cổng dữ liệu", "Camera an ninh", "Khảo sát", "Học AI"];
 
 async function main() {
   await mongoose.connect(config.mongoUri);

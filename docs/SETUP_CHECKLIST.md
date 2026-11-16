@@ -98,11 +98,11 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
 - [ ] `node Backend/scripts/seed-app-links.js` — 3 lưới Trang chủ (Tiện ích
   nhanh / Chính quyền số / Kinh tế · Văn hóa · Học tập), Dịch vụ, Cổng kết nối.
   Trang chủ gộp 3 nhóm thành **1 lưới "Tiện ích"** (16/11/2026: bỏ OCOP, BHXH,
-  Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát; Học vụ số →
+  Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát, Học AI; Học vụ số →
   binhdanhocvuso.gov.vn — DB đang chạy: `node Backend/scripts/update-home-links.js`).
   Các mục **chưa có link** (bấm vào báo "đang cập nhật"), điền qua AdminWeb →
   Icon & liên kết MiniApp khi xã xác nhận URL `.gov.vn`:
-  Lãnh đạo xã, Bản đồ số, QR tài liệu, Học AI.
+  Lãnh đạo xã, Bản đồ số, QR tài liệu.
 - [x] **Du lịch / Văn hóa** (16/11/2026): nội dung từ Trang TTĐT xã (Giới thiệu
   chung + tin Văn hóa - Xã hội: đình Kinh Châu/Uyên Phong, ca trù Kinh Châu, ngày
   hội, văn nghệ, thể thao), ảnh ở `Backend/public/site/gioi-thieu` —

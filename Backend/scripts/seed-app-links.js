@@ -8,7 +8,7 @@ const AppLink = require("../src/models/AppLink");
 
 // Theo bộ giao diện "Tuyên Hóa Số" (TuyenHoaSo-XanhDuong, màn Trang chủ + Dịch vụ).
 // Trang chủ gộp quick_link + gov + econ thành 1 lưới "Tiện ích" (16/11/2026 xã bỏ
-// OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát).
+// OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát, Học AI).
 // `icon` là slug trong MiniApp/src/static/th-icons/. Link ngoài CHỈ dùng cổng
 // quốc gia .gov.vn đã biết chắc; mục đặc thù của xã/tỉnh (bản đồ số, lãnh đạo
 // xã, QR tài liệu...) để href rỗng — MiniApp báo "đang cập nhật" — cán bộ điền
@@ -36,7 +36,6 @@ const ECON_LINKS = [
   { icon: "doanh-nghiep", label: "Doanh nghiệp", href: "https://dangkykinhdoanh.gov.vn" },
   { icon: "du-lich", label: "Du lịch", path: "/du-lich" },
   { icon: "van-hoa", label: "Văn hóa", path: "/van-hoa" },
-  { icon: "hoc-ai", label: "Học AI", href: "" }, // TODO
   // Nền tảng "Bình dân học vụ số" — link xã gửi 16/11/2026 (share.google → binhdanhocvuso.gov.vn).
   { icon: "hoc-vu-so", label: "Học vụ số", href: "https://binhdanhocvuso.gov.vn" },
 ];
