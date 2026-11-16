@@ -39,6 +39,14 @@
 /* ---------- Header xanh (Trang chủ + trang con) ---------- */
 .th-hdr{position:relative;overflow:hidden;background:linear-gradient(160deg,#1E56E0 0%,#1646C8 52%,#0F3AAE 100%);border-radius:0 0 32px 32px;padding:var(--th-top) 18px 62px;color:#fff}
 .th-hdr--home{padding-bottom:84px}
+/* Ảnh nền Trang chủ chạy luân phiên: 3 ảnh x 6s, mờ dần sang nhau + phóng nhẹ. */
+.th-hdr__slides{position:absolute;inset:0;pointer-events:none}
+.th-hdr__slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:th-slide 18s linear infinite}
+.th-hdr__slides img:nth-child(2){animation-delay:6s}
+.th-hdr__slides img:nth-child(3){animation-delay:12s}
+.th-hdr__slides::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,52,170,.78) 0%,rgba(22,70,200,.52) 50%,rgba(15,58,174,.82) 100%)}
+@keyframes th-slide{0%{opacity:0;transform:scale(1)}6%{opacity:1}33%{opacity:1}39%{opacity:0;transform:scale(1.08)}100%{opacity:0;transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.th-hdr__slides img{animation:none}.th-hdr__slides img:first-child{opacity:1}}
 .th-hdr--tabs{padding-bottom:56px}
 .th-hdr__c1{position:absolute;top:-86px;right:-74px;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
 .th-hdr__c2{position:absolute;left:-84px;bottom:-120px;width:250px;height:250px;border-radius:50%;background:rgba(20,184,166,.16);pointer-events:none}
@@ -49,7 +57,8 @@
 .th-logo{flex-shrink:0;border-radius:50%;border:2.5px solid #fff;background:#fff;box-shadow:0 6px 14px rgba(6,24,90,.35);object-fit:cover}
 .th-logo--sm{border-width:2px;box-shadow:none}
 .th-brand{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.th-brand b{font-size:17px;line-height:1.2;font-weight:800;letter-spacing:.02em;color:#fff}
+.th-brand b{font-size:16px;line-height:1.25;font-weight:800;letter-spacing:.01em;color:#fff}
+.th-brand b span{white-space:nowrap}
 .th-brand span{font-size:12px;color:rgba(255,255,255,.86)}
 .th-brand-sm{font-size:13px;font-weight:800;letter-spacing:.06em;color:#fff}
 .th-hdr__title{position:relative;padding-right:84px;min-height:74px;display:flex;flex-direction:column;justify-content:center;gap:5px}
@@ -99,8 +108,9 @@
 /* ---------- Lưới icon 4 cột ---------- */
 .th-grid{background:#fff;border-radius:20px;box-shadow:var(--th-card-shadow);padding:16px 6px 14px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));row-gap:16px;column-gap:2px}
 .th-gi{display:flex;flex-direction:column;align-items:center;gap:7px;color:var(--th-text);background:none;border:0;padding:0}
-.th-gi__ic{width:60px;height:60px;border-radius:18px;background:linear-gradient(180deg,#F6F9FF 0%,#E7EEFE 100%);box-shadow:inset 0 0 0 1px #E3EBFB;display:flex;align-items:center;justify-content:center}
-.th-gi__ic img{width:44px;height:44px;object-fit:contain}
+/* Icon 3D đứng tự do, không ô khung nền (kiểu Thăng Phú). */
+.th-gi__ic{width:60px;height:60px;display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.th-gi__ic img{width:58px;height:58px;object-fit:contain}
 .th-gi__lb{font-size:12px;line-height:1.3;font-weight:600;text-align:center}
 .th-gi:active .th-gi__ic{transform:scale(.94)}
 

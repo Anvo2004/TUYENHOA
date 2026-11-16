@@ -4,6 +4,9 @@ import { Page } from "zmp-ui";
 import API_BASE_URL from "../../data/api-config.js";
 import { openExternal } from "../../utils/open-external.js";
 import logo from "../../static/logo-tuyenhoa.png";
+import homeBg1 from "../../static/home-bg-1.jpg";
+import homeBg2 from "../../static/home-bg-2.webp";
+import homeBg3 from "../../static/home-bg-3.jpg";
 import AppIcon from "../app-icon.jsx";
 import { thIcon } from "./th-icons.js";
 
@@ -94,7 +97,9 @@ export function useHasNotices() {
   return has;
 }
 
-// Thanh thương hiệu lớn (Trang chủ + các tab chính): logo + "XÃ TUYÊN HÓA" + chuông.
+// Thanh thương hiệu lớn (Trang chủ + các tab chính): logo + "UBND Xã Tuyên Hóa -
+// Quảng Trị" + chuông. Tên tách 2 cụm không ngắt giữa chừng (chỗ hẹp vì nút
+// "..." / "X" của Zalo chiếm góc phải).
 const BrandBar = () => {
   const navigate = useNavigate();
   const bellDot = useHasNotices();
@@ -102,7 +107,9 @@ const BrandBar = () => {
     <div className="th-hdr__bar">
       <img src={logo} alt="Logo UBND xã Tuyên Hóa" width="46" height="46" className="th-logo" />
       <div className="th-brand">
-        <b>XÃ TUYÊN HÓA</b>
+        <b>
+          <span>UBND Xã Tuyên Hóa</span> <span>- Quảng Trị</span>
+        </b>
         <span>Chính quyền số gần dân</span>
       </div>
       <button type="button" aria-label="Thông báo" className="th-glassbtn" onClick={() => navigate("/thong-bao")}>
@@ -113,9 +120,18 @@ const BrandBar = () => {
   );
 };
 
-// Header Trang chủ: thanh thương hiệu + ô tìm kiếm (children).
+// Header Trang chủ: thanh thương hiệu + ô tìm kiếm (children). Nền là 3 ảnh
+// phong cảnh Tuyên Hóa thay nhau hiện (CSS .th-hdr__slides, 18s/vòng), phủ lớp
+// xanh để chữ trắng vẫn đọc rõ.
+const HOME_SLIDES = [homeBg1, homeBg2, homeBg3];
+
 export const ThHomeHeader = ({ children }) => (
   <header className="th-hdr th-hdr--home">
+    <div aria-hidden="true" className="th-hdr__slides">
+      {HOME_SLIDES.map((src) => (
+        <img key={src} src={src} alt="" />
+      ))}
+    </div>
     <Circles />
     <div className="th-hdr__in">
       <BrandBar />

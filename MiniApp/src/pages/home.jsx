@@ -64,9 +64,6 @@ const HomePage = () => {
           <div style={{ paddingRight: 84, display: "flex", flexDirection: "column", gap: 4 }}>
             <span className="th-hero__kicker">{SITE.appName.toUpperCase()}</span>
             <h2 style={{ fontSize: 19, lineHeight: 1.3, fontWeight: 800 }}>{SITE.slogan}</h2>
-            <p style={{ fontSize: 12.5, lineHeight: 1.5, color: "rgba(255,255,255,.9)" }}>
-              Hợp nhất từ {SITE.mergedFrom.length} xã: {SITE.mergedFrom.join(" · ")}
-            </p>
           </div>
           <div className="th-stats">
             <div className="th-stat">
