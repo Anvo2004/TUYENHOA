@@ -52,6 +52,7 @@ const SERVICES = [
   { icon: "lich-cat-dien", label: "Lịch cắt điện", type: "online", path: "/lich-cup-dien" },
   { icon: "lich-y-te", label: "Lịch y tế – Tiêm chủng", type: "online", path: "/lich-y-te" },
   { icon: "tro-cap", label: "Thông báo trợ cấp", type: "online", path: "/thong-bao" },
+  { icon: "loa", label: "Chỉ đạo điều hành", type: "online", path: "/thong-bao?tab=chi-dao" },
   { icon: "thu-tuc", label: "Danh mục thủ tục", type: "online", path: "/thu-tuc-hanh-chinh" },
   { icon: "thien-tai", label: "Phòng chống thiên tai", type: "offline", path: "/phong-chong-thien-tai" },
 ];

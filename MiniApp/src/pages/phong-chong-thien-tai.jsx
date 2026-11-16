@@ -5,6 +5,8 @@ import PCTT_SKILLS from "../data/pctt-skills.js";
 import { openExternal } from "../utils/open-external.js";
 import { callPhone } from "../utils/call-phone.js";
 import { ThPage, ThHeader, ThSection, MoreLink, Th3, Ic, useToast } from "../components/th/th-ui.jsx";
+import { useNewsKind } from "../data/use-news.js";
+import ThNewsRow from "../components/th/news-row.jsx";
 
 // Màn Phòng chống thiên tai theo bộ giao diện "Tuyên Hóa Số" (14-PhongChongThienTai).
 // - SOS gọi 112 (Tìm kiếm cứu nạn — số khẩn cấp toàn quốc).
@@ -12,6 +14,8 @@ import { ThPage, ThHeader, ThSection, MoreLink, Th3, Ic, useToast } from "../com
 // - Số Ban Chỉ huy PCTT&TKCN xã: SiteInfo.contact.pcttPhone (AdminWeb/DB) — trống thì
 //   hiện "Đang cập nhật". 112/114/115 là số khẩn cấp quốc gia.
 // - Bản đồ số: SiteInfo.contact.mapUrl (.gov.vn của tỉnh) — trống thì báo đang cập nhật.
+// - Tin cảnh báo, chỉ đạo PCTT: tin của trang TTĐT xã có tiêu đề liên quan thiên
+//   tai (/api/public/news?kind=pctt, lọc ở newsScrapeService.PCTT_RE).
 const NATIONAL = [
   ["112", "Tìm kiếm cứu nạn"],
   ["114", "Cứu hỏa"],
@@ -25,6 +29,7 @@ const PhongChongThienTaiPage = () => {
   const [toast, showToast] = useToast();
   const [contact, setContact] = useState({});
   const phonesRef = useRef(null);
+  const pcttNews = useNewsKind("pctt", 5);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/public/site-info`)
@@ -84,6 +89,14 @@ const PhongChongThienTaiPage = () => {
           ))}
         </div>
       </section>
+
+      {pcttNews.items.length > 0 && (
+        <ThSection title="Tin cảnh báo, chỉ đạo phòng chống thiên tai">
+          {pcttNews.items.map((item) => (
+            <ThNewsRow key={item.id} item={item} icon="thien-tai" />
+          ))}
+        </ThSection>
+      )}
 
       {VIDEOS.length > 0 && (
         <ThSection title="Video hướng dẫn" action={<MoreLink onClick={() => navigate("/pctt-ky-nang")}>Xem tất cả</MoreLink>}>

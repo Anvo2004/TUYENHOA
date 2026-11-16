@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import API_BASE_URL from "../data/api-config.js";
 import { ThPage, ThHeader, ThSection, ThSeg, ThChips, ThSelect, ThEmpty, Th3, Ic } from "../components/th/th-ui.jsx";
 import { TRO_CAP_CATEGORIES, statusOf, weekday, ddmm } from "../data/tro-cap-categories.js";
+import { useNewsKind } from "../data/use-news.js";
+import ThNewsRow from "../components/th/news-row.jsx";
 
 // Màn Thông báo theo bộ giao diện "Tuyên Hóa Số" (10-ThongBao): tab "Trợ cấp xã
-// hội" (lịch chi trả theo tháng/năm, collection TroCapSchedule) + "Thông báo
-// khác" (collection Notice). Cả hai do cán bộ nhập qua AdminWeb.
+// hội" (lịch chi trả theo tháng/năm, collection TroCapSchedule) + "Chỉ đạo điều
+// hành" (tự cào từ mục Thông tin chỉ đạo điều hành của trang TTĐT xã) + "Thông
+// báo khác" (collection Notice). Trợ cấp và Thông báo khác do cán bộ nhập qua AdminWeb.
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 const NOW = new Date();
 const YEARS = [NOW.getFullYear() - 1, NOW.getFullYear(), NOW.getFullYear() + 1];
@@ -66,7 +70,13 @@ const PayoutCard = ({ item, thang, nam }) => {
 };
 
 const ThongBaoPage = () => {
-  const [tab, setTab] = useState("tro-cap");
+  // Mở thẳng 1 tab bằng /thong-bao?tab=chi-dao (vd. icon "Chỉ đạo điều hành").
+  const { search } = useLocation();
+  const [tab, setTab] = useState(() => {
+    const t = new URLSearchParams(search).get("tab");
+    return ["tro-cap", "chi-dao", "khac"].includes(t) ? t : "tro-cap";
+  });
+  const chiDao = useNewsKind("chi-dao", 30);
 
   // ===== Trợ cấp xã hội (tra cứu theo tháng/năm) =====
   const [thang, setThang] = useState(NOW.getMonth() + 1);
@@ -120,8 +130,9 @@ const ThongBaoPage = () => {
       <div className="th-float th-float--30">
         <ThSeg
           options={[
-            { value: "tro-cap", label: "Trợ cấp xã hội" },
-            { value: "khac", label: "Thông báo khác" },
+            { value: "tro-cap", label: "Trợ cấp" },
+            { value: "chi-dao", label: "Chỉ đạo điều hành" },
+            { value: "khac", label: "Khác" },
           ]}
           value={tab}
           onChange={setTab}
@@ -181,6 +192,21 @@ const ThongBaoPage = () => {
               filtered.map((item) => <PayoutCard key={item._id} item={item} thang={searched.thang} nam={searched.nam} />)}
           </ThSection>
         </>
+      )}
+
+      {tab === "chi-dao" && (
+        <ThSection tight>
+          {chiDao.loading && <div className="th-spin" />}
+          {!chiDao.loading && chiDao.error && <ThEmpty icon="thong-bao" title="Không tải được thông tin" desc={chiDao.error} />}
+          {!chiDao.loading && !chiDao.error && chiDao.items.length === 0 && (
+            <ThEmpty
+              icon="thong-bao"
+              title="Chưa có thông tin chỉ đạo điều hành"
+              desc="Thông báo, quyết định chỉ đạo của UBND xã sẽ hiện ở đây."
+            />
+          )}
+          {!chiDao.loading && chiDao.items.map((item) => <ThNewsRow key={item.id} item={item} icon="van-ban" />)}
+        </ThSection>
       )}
 
       {tab === "khac" && (

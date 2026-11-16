@@ -1,6 +1,20 @@
-// TODO: danh sách thôn chính thức của xã Tuyên Hóa (Quảng Trị) — chưa có tài
-// liệu của xã. Xã hợp nhất từ Tiến Hóa, Châu Hóa, Cao Quảng, Văn Hóa; điền
-// đúng tên thôn theo văn bản của xã (xem docs/SETUP_CHECKLIST.md), KHÔNG đoán.
-// Để trống thì ensureVillages() không làm gì; cán bộ cũng có thể thêm thôn qua
-// AdminWeb (mục Thôn xóm).
-module.exports = [];
+// Danh sách 11 thôn của xã Tuyên Hóa (Quảng Trị), do xã cung cấp ngày 13/11/2026.
+// ensureVillages() chỉ THÊM thôn còn thiếu (theo tên) khi Backend khởi động. Thông
+// tin cán bộ, số hộ, dân số của từng thôn nhập ở AdminWeb → Thôn xóm.
+// Lưu ý: thôn đã xoá trên AdminWeb mà vẫn còn trong danh sách này sẽ được tạo
+// lại ở lần khởi động sau. Muốn bỏ hẳn một thôn thì xoá ở cả 2 nơi.
+const NAMES = [
+  "Tiền Phong",
+  "Thanh Phong",
+  "Minh Phong",
+  "Hồng Phong",
+  "Tiến Hoá",
+  "Văn Hoá",
+  "Lệ Sơn",
+  "Châu Hoá",
+  "Phong Châu",
+  "Cao Quảng",
+  "Cao Hoá",
+];
+
+module.exports = NAMES.map((name, i) => ({ ten: `Thôn ${name}`, thuTu: i + 1 }));

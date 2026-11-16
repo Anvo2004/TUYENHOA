@@ -65,10 +65,12 @@ module.exports = {
     // GitHub rồi đẩy dữ liệu qua route ingest này (VPS có thể bị chặn gọi thẳng
     // cskh-api.cpc.vn — xem README của workflow).
     ingestSecret: process.env.LICH_CUP_DIEN_INGEST_SECRET || "",
-    // Nguồn thay thế: cào trang bên thứ 3 xenvn.com (đăng lại lịch cắt điện).
-    // URL mẫu Thăng Điền: https://xenvn.com/lich-cup-dien/dien-luc-thang-binh-pc05ff/
-    // — path "dien-luc-thang-binh-pc05ff" đổi theo mã điện lực từng khu vực.
-    xenvnUrl: process.env.XENVN_URL || "",
+    // Nguồn chính: cào trang bên thứ 3 xenvn.com (đăng lại lịch cắt điện EVN).
+    // Xã Tuyên Hóa thuộc Điện lực Tuyên Hóa (PC Quảng Bình cũ, mã pc01ee) — lấy
+    // từ trang tỉnh https://xenvn.com/lich-cup-dien/tinh-quang-binh-quang-tri/
+    // (do xã cung cấp, đã kiểm tra 16/11/2026). Trang gồm mọi trạm của điện lực
+    // (nhiều xã) — MiniApp có bộ lọc Khu vực.
+    xenvnUrl: process.env.XENVN_URL || "https://xenvn.com/lich-cup-dien/dien-luc-tuyen-hoa-pc01ee/",
   },
 
   // ===== Văn bản - Chính sách =====
@@ -76,11 +78,11 @@ module.exports = {
   // thì vanBanTuyenHoaService tự bỏ qua đồng bộ (không cào nhầm site khác).
   vanBanSourceUrl: process.env.VAN_BAN_SOURCE_URL || "",
 
-  // ===== Tin tức (trang TTĐT xã) =====
-  // TODO: chưa xác nhận trang tin tức của xã Tuyên Hóa. newsScrapeService.js
-  // parse HTML portal VNPT của các xã Đà Nẵng — nếu trang của xã khác cấu trúc
-  // thì phải viết lại parser trước khi điền NEWS_SOURCE_URL.
-  newsSourceUrl: process.env.NEWS_SOURCE_URL || "",
+  // ===== Tin tức + Chỉ đạo điều hành (trang TTĐT xã, nền 3cms Quảng Trị) =====
+  // Do xã cung cấp 16/11/2026. Parser: services/newsScrapeService.js.
+  newsSourceUrl: process.env.NEWS_SOURCE_URL || "https://tuyenhoa.quangtri.gov.vn/tin-tuc-su-kien",
+  chiDaoSourceUrl:
+    process.env.CHI_DAO_SOURCE_URL || "https://tuyenhoa.quangtri.gov.vn/thong-tin-chi-ao-ieu-hanh",
 
   // ===== Cổng góp ý 1022 (gopy.danang.gov.vn) — đồng bộ phản ánh sang hệ thống thành phố =====
   // Xác thực: HTTP Basic Auth. Bắt buộc User-Agent trình duyệt (WAF chặn UA lạ).

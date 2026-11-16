@@ -18,9 +18,13 @@ const AppLink = require("../models/AppLink");
 
 const router = express.Router();
 
-// ===== Tin tức (cào từ trang TTĐT xã, xem config.newsSourceUrl — tạm thời thay API chia sẻ tin) =====
+// ===== Tin cào từ trang TTĐT xã (services/newsScrapeService.js) =====
+// ?kind=tin-tuc (mặc định) | chi-dao (Thông tin chỉ đạo điều hành) | pctt (tin thiên tai)
+const NEWS_KINDS = ["tin-tuc", "chi-dao", "pctt"];
 router.get("/news", async (req, res) => {
-  const items = await newsScrapeService.listNews(20);
+  const kind = NEWS_KINDS.includes(req.query.kind) ? req.query.kind : "tin-tuc";
+  const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 20, 1), 50);
+  const items = await newsScrapeService.listNews(limit, kind);
   res.json({ items });
 });
 

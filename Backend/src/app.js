@@ -143,8 +143,8 @@ app.get("/dieu-khoan-su-dung", (req, res) => res.send(`
   <h2>9. Liên hệ</h2>
   <div class="contact-box">
     <p><strong>UBND xã Tuyên Hóa</strong></p>
-    <p>Địa chỉ: [TODO: địa chỉ trụ sở UBND xã], xã Tuyên Hóa, tỉnh Quảng Trị</p>
-    <p>Hotline: [TODO: số điện thoại UBND xã]</p>
+    <p>Địa chỉ: Thôn Tiền Phong, xã Tuyên Hóa, tỉnh Quảng Trị</p>
+    <p>Điện thoại: 0232 3672 112 · Email: ubndtuyenhoa@quangtri.gov.vn</p>
   </div>
 </body>
 </html>

@@ -1,18 +1,19 @@
 const mongoose = require("mongoose");
 
-// Tin tức cào từ trang TTĐT xã (URL chưa xác nhận — xem docs/SETUP_CHECKLIST.md). Tạm thời cào HTML;
-// khi có API chia sẻ tin thật thì chỉ đổi nguồn trong newsScrapeService, giữ
-// nguyên model này. Khử trùng theo `nid` (id bài trên CMS nguồn).
+// Tin cào từ trang TTĐT xã tuyenhoa.quangtri.gov.vn (xem newsScrapeService.js).
+// Khử trùng theo `nid` (id bài trên CMS nguồn = mốc tạo bài, mili giây).
 const newsSchema = new mongoose.Schema(
   {
-    nid: { type: Number, required: true, unique: true }, // id bài trên CMS (nid/xxxx)
+    nid: { type: Number, required: true, unique: true }, // id bài trên CMS (số cuối của link)
+    // "tin-tuc" = Tin tức - Sự kiện, "chi-dao" = Thông tin chỉ đạo điều hành.
+    kind: { type: String, default: "tin-tuc", index: true },
     title: { type: String, required: true },
     summary: { type: String, default: "" },
     date: { type: String, default: "" }, // dd/MM/yyyy (chuỗi, theo tóm tắt)
     tag: { type: String, default: "Tin tức" },
     source: { type: String, default: "UBND xã Tuyên Hóa" },
     link: { type: String, default: "" },
-    imageUrl: { type: String, default: "" }, // URL Cloudinary sau khi re-host
+    imageUrl: { type: String, default: "" }, // ảnh tóm tắt, nhúng thẳng từ trang nguồn
     scrapedAt: { type: Date, default: Date.now },
 
     // Trạng thái đăng lên Zalo OA (Nội dung dạng Bài viết) — xem services/zaloNewsService.js

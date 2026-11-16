@@ -3,43 +3,42 @@ const config = require("../config");
 const News = require("../models/News");
 
 // ============================================================
-// Cào tin tức mới nhất từ trang TTĐT xã (config.newsSourceUrl) → Mongo News.
-// TẠM THỜI thay cho API chia sẻ tin khi chưa có Base URL.
+// Cào tin từ trang TTĐT xã Tuyên Hóa (tuyenhoa.quangtri.gov.vn — nền Liferay
+// "3cms" dùng chung cho các xã tỉnh Quảng Trị) → Mongo News. Hai nguồn:
+//   - kind "tin-tuc": chuyên mục Tin tức - Sự kiện (config.newsSourceUrl)
+//   - kind "chi-dao": Thông tin chỉ đạo điều hành (config.chiDaoSourceUrl)
 //
-// Trang tralien.danang.gov.vn (trang của xã gốc Trà Liên — parser viết cho trang này) dùng portal VNPT (iGate/LGSP, theme "qnm-ubnd" —
-// hạ tầng cũ của Quảng Nam, xã vẫn dùng lại sau sáp nhập) — KHÁC HẲN CMS
-// "CMS14" của Thăng Điền (bản cào cũ dùng regex khớp class `QTI_tinthuong
-// news-k7` đã bỏ, không áp dụng được cho Tuyên Hóa). Trang /tin-tuc liệt kê
-// tin theo từng khối <div class="ArticleCat"> (1 khối/chuyên mục), mỗi khối
-// có <ul class="ArticleOfCat"><li> chứa 1 tin. Ảnh nguồn phục vụ đúng
-// Content-Type (image/jpeg, đã kiểm tra) nên nhúng thẳng được, KHÔNG cần
-// re-host qua Cloudinary như CMS cũ (vốn khai sai Content-Type gây
-// ERR_BLOCKED_BY_ORB).
+// Cấu trúc trang danh sách (đã kiểm tra 16/11/2026): vài tin nổi bật dạng
+// <div class="frames-catalogue-article"> (tin tức) hoặc <div class="artItem">
+// (chỉ đạo) có a.article_title_link + .article_summary + img.img_comment; phần
+// "Các tin đã đăng" là li > a.article_item_link kèm <font class="article_date">.
+// Phân trang: div.google_page a[href*="page=N"].
+//
+// ID bài = số cuối của link (/chi-tiet-tin/-/view-article/1/<chuyên mục>/<id>),
+// chính là mốc thời gian tạo bài tính bằng mili giây → dùng làm `nid` (sắp xếp
+// mới→cũ) và suy ra ngày đăng, không cần mở trang chi tiết.
+// Ảnh tóm tắt: trang tin tức trả src "/3cmsnew-portlet/ViewImage?..." (404),
+// đường đúng là "/o/3cmsnew-portlet/ViewImage?..." (image/jpeg) — sửa ở toImageUrl.
 // ============================================================
 
-const UA = "Mozilla/5.0 (compatible; TuyenHoaMiniAppBot/1.0)";
+const UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
 
-// Rút gọn vài tên chuyên mục quá dài cho vừa badge nhỏ trên UI — không đổi
-// tên hiển thị đầy đủ ở đâu khác, chỉ dùng cho field `tag`.
-const CATEGORY_ALIAS = {
-  "Hoạt Động Lãnh Đạo": "Lãnh đạo",
-  "Xây Dựng Đảng – Chính Quyền": "Đảng - Chính quyền",
-  "Quốc phòng - An ninh": "Quốc phòng - AN",
-  "Phòng Chống Thiên Tai": "Thiên tai",
-  "Y Tế - Văn Hóa - Xã Hội - KHCN": "Y tế - VH - XH",
-  "Kinh tế - Nông thôn mới - OCOP": "Kinh tế - OCOP",
-  "Hoạt Động Mặt Trận – Đoàn Thể": "Mặt trận - Đoàn thể",
-  "Hoạt động Giáo dục - Đào tạo": "Giáo dục",
-  "Thông tin tuyên truyền": "Tuyên truyền",
+// Số trang danh sách đọc mỗi lượt (trang 1 ~15 tin). Lượt đầu cào vài trang
+// để có sẵn tin cũ; các lượt sau tin mới luôn nằm ở trang 1.
+const MAX_PAGES = 3;
+
+const SOURCES = {
+  "tin-tuc": { tag: "Tin tức", url: () => config.newsSourceUrl },
+  "chi-dao": { tag: "Chỉ đạo điều hành", url: () => config.chiDaoSourceUrl },
 };
 
-function isConfigured() {
-  return Boolean(config.newsSourceUrl);
-}
+// Tin liên quan phòng chống thiên tai — màn PCTT lọc theo tiêu đề.
+const PCTT_RE =
+  /thiên tai|bão|lũ|lụt|mưa lớn|mưa to|sạt lở|ngập|áp thấp|triều cường|hạn hán|giông|dông|lốc|rét đậm|rét hại|PCTT|TKCN|cứu hộ|cứu nạn/i;
 
-function shortCategory(name) {
-  if (CATEGORY_ALIAS[name]) return CATEGORY_ALIAS[name];
-  return name.length > 20 ? "Tin tức" : name;
+function isConfigured() {
+  return Object.values(SOURCES).some((s) => Boolean(s.url()));
 }
 
 function toAbsoluteUrl(src, base) {
@@ -51,104 +50,175 @@ function toAbsoluteUrl(src, base) {
   }
 }
 
-// Trả [{ nid, title, summary, date, tag, link, imageUrl }], đã khử trùng theo nid.
-async function fetchListing() {
-  const SOURCE_URL = config.newsSourceUrl;
-  const res = await fetch(SOURCE_URL, { headers: { "User-Agent": UA } });
-  if (!res.ok) throw new Error(`Không tải được trang nguồn: HTTP ${res.status}`);
-  const html = await res.text();
+function toImageUrl(src, base) {
+  const fixed = /^\/3cmsnew-portlet\//.test(src || "") ? `/o${src}` : src;
+  return toAbsoluteUrl(fixed, base);
+}
+
+function clean(text) {
+  return (text || "").replace(/\s+/g, " ").trim(); // \s gồm cả &nbsp;
+}
+
+// mili giây → "dd/MM/yyyy" theo giờ Việt Nam.
+function vnDate(ms) {
+  const d = new Date(ms + 7 * 3600 * 1000);
+  const p = (n) => String(n).padStart(2, "0");
+  return `${p(d.getUTCDate())}/${p(d.getUTCMonth() + 1)}/${d.getUTCFullYear()}`;
+}
+
+function articleId(href) {
+  const m = (href || "").match(/view-article\/\d+\/\d+\/(\d{10,})/);
+  return m ? Number(m[1]) : null;
+}
+
+// HTML 1 trang danh sách → { items, nextUrl }.
+function parseListing(html, pageUrl, kind) {
   const $ = cheerio.load(html);
-
-  const seen = new Set();
+  const tag = SOURCES[kind]?.tag || "Tin tức";
   const items = [];
+  const seen = new Set();
+  const add = (it) => {
+    if (!it.nid || !it.title || seen.has(it.nid)) return;
+    seen.add(it.nid);
+    items.push({ ...it, kind, tag, date: vnDate(it.nid) });
+  };
 
-  $("div.ArticleCat").each((_, catEl) => {
-    const category = $(catEl).find(".ArticleCatName a").first().text().trim();
-
-    $(catEl)
-      .find("ul.ArticleOfCat > li")
-      .each((__, li) => {
-        const $li = $(li);
-        const titleA = $li.find("h2.Title a").first();
-        const title = titleA.text().replace(/\s+/g, " ").trim();
-        const href = titleA.attr("href") || "";
-        if (!title || !href) return;
-
-        const nidMatch = href.match(/-(\d+)$/);
-        if (!nidMatch) return;
-        const nid = Number(nidMatch[1]);
-        if (seen.has(nid)) return;
-        seen.add(nid);
-
-        const summary = $li.find("p").first().text().replace(/\s+/g, " ").trim();
-        const date = $li.find(".Ngaydang").first().text().trim();
-        const img = $li.find("img").first().attr("src") || "";
-
-        items.push({
-          nid,
-          title,
-          summary,
-          date,
-          tag: category ? shortCategory(category) : "Tin tức",
-          link: toAbsoluteUrl(href, SOURCE_URL),
-          imageUrl: toAbsoluteUrl(img, SOURCE_URL),
-        });
-      });
+  // Tin nổi bật: có tóm tắt + ảnh.
+  $("a.article_title_link").each((_, a) => {
+    const $a = $(a);
+    const href = $a.attr("href") || "";
+    const box = $a.parent();
+    add({
+      nid: articleId(href),
+      title: clean($a.find(".article_title").text() || $a.text()),
+      summary: clean(box.find(".article_summary").first().text()),
+      link: toAbsoluteUrl(href, pageUrl),
+      imageUrl: toImageUrl(box.find("img.img_comment").first().attr("src"), pageUrl),
+    });
   });
 
-  return items;
+  // "Các tin đã đăng": chỉ có tiêu đề + ngày.
+  $("a.article_item_link").each((_, a) => {
+    const $a = $(a).clone();
+    $a.find(".article_date").remove();
+    const href = $(a).attr("href") || "";
+    add({
+      nid: articleId(href),
+      title: clean($a.text()),
+      summary: "",
+      link: toAbsoluteUrl(href, pageUrl),
+      imageUrl: "",
+    });
+  });
+
+  const cur = Number(new URL(pageUrl).searchParams.get("page")) || 1;
+  let nextUrl = "";
+  $(".google_page a[href]").each((_, a) => {
+    const href = $(a).attr("href");
+    const abs = toAbsoluteUrl(href, pageUrl);
+    if (!nextUrl && abs && Number(new URL(abs).searchParams.get("page")) === cur + 1) nextUrl = abs;
+  });
+  return { items, nextUrl };
+}
+
+async function fetchHtml(url) {
+  const res = await fetch(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(30000) });
+  if (!res.ok) throw new Error(`Không tải được ${url}: HTTP ${res.status}`);
+  return res.text();
+}
+
+// Trả [{ nid, kind, title, summary, date, tag, link, imageUrl }] của 1 nguồn.
+async function fetchListing(kind = "tin-tuc", maxPages = MAX_PAGES) {
+  let url = SOURCES[kind]?.url();
+  if (!url) return [];
+  const all = new Map();
+  for (let page = 0; url && page < maxPages; page++) {
+    const { items, nextUrl } = parseListing(await fetchHtml(url), url, kind);
+    for (const it of items) {
+      // Tin nổi bật (có tóm tắt/ảnh) ưu tiên hơn bản chỉ có tiêu đề.
+      const prev = all.get(it.nid);
+      if (!prev || (!prev.summary && it.summary)) all.set(it.nid, it);
+    }
+    url = nextUrl;
+  }
+  return [...all.values()];
 }
 
 // Upsert theo nid — tin mới tạo mới, tin đã có cập nhật lại text/ảnh (ảnh nhúng
 // thẳng từ nguồn, không lưu file riêng nên cứ ghi đè theo bản mới nhất).
-async function syncNews() {
-  if (!isConfigured()) {
-    console.log("[News] Bỏ qua đồng bộ: NEWS_SOURCE_URL chưa được cấu hình");
-    return 0;
+const TRUNCATED_RE = /(\.\.\.|…)$/;
+
+// Trang danh sách cắt tiêu đề dài ("...") — lấy tiêu đề đầy đủ ở trang chi tiết.
+async function fetchFullTitle(link) {
+  try {
+    const $ = cheerio.load(await fetchHtml(link));
+    return clean($("h3.h1_title_news").first().text());
+  } catch (e) {
+    console.warn(`[News] Không lấy được tiêu đề đầy đủ ${link}: ${e.message}`);
+    return "";
   }
-  const items = await fetchListing();
+}
+
+async function syncKind(kind) {
+  const items = await fetchListing(kind);
   let created = 0;
   for (const it of items) {
-    const existing = await News.findOne({ nid: it.nid }).select("_id").lean();
-    if (existing) {
-      await News.updateOne(
-        { nid: it.nid },
-        {
-          $set: {
-            title: it.title,
-            summary: it.summary,
-            date: it.date,
-            tag: it.tag,
-            link: it.link,
-            imageUrl: it.imageUrl,
-          },
-        }
-      );
-      continue;
+    if (TRUNCATED_RE.test(it.title)) {
+      const existing = await News.findOne({ nid: it.nid }).select("title").lean();
+      it.title =
+        existing && !TRUNCATED_RE.test(existing.title)
+          ? existing.title
+          : (await fetchFullTitle(it.link)) || it.title;
     }
-    await News.create({
-      nid: it.nid,
+    const fields = {
+      kind: it.kind,
       title: it.title,
-      summary: it.summary,
       date: it.date,
       tag: it.tag,
-      source: "UBND xã Tuyên Hóa",
       link: it.link,
-      imageUrl: it.imageUrl,
-      scrapedAt: new Date(),
-    });
-    created++;
+      // Tin chỉ thấy ở phần "Các tin đã đăng" không có tóm tắt/ảnh — không ghi
+      // đè tóm tắt/ảnh đã lấy được ở lượt trước khi tin còn nằm ở khối nổi bật.
+      ...(it.summary ? { summary: it.summary } : {}),
+      ...(it.imageUrl ? { imageUrl: it.imageUrl } : {}),
+    };
+    const r = await News.updateOne(
+      { nid: it.nid },
+      {
+        $set: fields,
+        $setOnInsert: { nid: it.nid, source: "UBND xã Tuyên Hóa", scrapedAt: new Date() },
+      },
+      { upsert: true }
+    );
+    if (r.upsertedCount) created++;
   }
-  console.log(`[News] Đồng bộ ${items.length} tin (mới: ${created})`);
+  console.log(`[News] Đồng bộ ${kind}: ${items.length} tin (mới: ${created})`);
+  return created;
+}
+
+async function syncNews() {
+  if (!isConfigured()) {
+    console.log("[News] Bỏ qua đồng bộ: NEWS_SOURCE_URL / CHI_DAO_SOURCE_URL chưa được cấu hình");
+    return 0;
+  }
+  let created = 0;
+  for (const kind of Object.keys(SOURCES)) {
+    if (!SOURCES[kind].url()) continue;
+    try {
+      created += await syncKind(kind);
+    } catch (e) {
+      // 1 nguồn lỗi không chặn nguồn còn lại.
+      console.error(`[News] Đồng bộ ${kind} lỗi:`, e.message);
+    }
+  }
   return created;
 }
 
 // ===== Nội dung đầy đủ 1 tin (trang chi tiết) — dùng để tạo bài viết OA đầy đủ =====
-// Trang chi tiết portal VNPT: .ArticleDetailControl > .ArticleHeader (tiêu đề),
-// .ArticleSummary (sapo), .ArticleContent (thân bài: <p> xen <div><img>, bảng,
-// danh sách). Duyệt thân bài ĐÚNG THỨ TỰ, gom đoạn văn liên tiếp thành 1 khối
-// chữ, mỗi ảnh 1 khối ảnh; bảng thành từng dòng "ô | ô". Đã chạy thử trên 7
-// bài thật của tralien.danang.gov.vn (trang của xã gốc Trà Liên — parser viết cho trang này) (tin thường, bài dài, danh sách ứng cử có ảnh).
+// Trang chi tiết 3cms: h3.h1_title_news (tiêu đề), span.summary_detail_news
+// (sapo), div.article_content (thân bài: <p> xen <img>, bảng). Duyệt thân bài
+// ĐÚNG THỨ TỰ, gom đoạn văn liên tiếp thành 1 khối chữ, mỗi ảnh 1 khối ảnh;
+// bảng thành từng dòng "ô | ô". Đã chạy thử trên tin thật của
+// tuyenhoa.quangtri.gov.vn (tin có ảnh, thông báo dạng ảnh scan).
 const DETAIL_BLOCK_TAGS = new Set([
   "p", "div", "h1", "h2", "h3", "h4", "h5", "h6", "li", "ul", "ol", "blockquote",
   "figure", "figcaption", "section", "article", "table", "thead", "tbody", "tr",
@@ -162,10 +232,8 @@ const DETAIL_EMBED_TAGS = new Set(["iframe", "embed", "object", "video", "audio"
 // — sapo (nếu có) là đoạn đầu; "file" = tài liệu đính kèm/khung nhúng.
 function parseNewsDetail(html, pageUrl) {
   const $ = cheerio.load(html);
-  const root = $(".ArticleDetailControl .ArticleContent").first().length
-    ? $(".ArticleDetailControl .ArticleContent").first()
-    : $(".ArticleContent").first();
-  const sapo = $(".ArticleSummary").first().text().replace(/\s+/g, " ").trim();
+  const root = $(".article_content").first();
+  const sapo = $(".summary_detail_news").first().text().replace(/\s+/g, " ").trim();
 
   const blocks = sapo ? [{ type: "text", paragraphs: [sapo] }] : [];
   let para = "";
@@ -232,9 +300,17 @@ async function fetchNewsDetail(link) {
   return parseNewsDetail(await res.text(), link);
 }
 
-// Tin mới nhất — sắp theo nid giảm dần (id bài lớn hơn ~ bài mới hơn).
-async function listNews(limit = 20) {
-  return News.find().sort({ nid: -1 }).limit(limit).lean();
+// Tin mới nhất — sắp theo nid giảm dần (nid = mốc tạo bài, lớn hơn = mới hơn).
+// kind: "tin-tuc" (mặc định, gồm cả tin cũ chưa có kind) | "chi-dao" | "pctt"
+// (tin của cả 2 nguồn có tiêu đề liên quan thiên tai — màn Phòng chống thiên tai).
+async function listNews(limit = 20, kind = "tin-tuc") {
+  const filter =
+    kind === "pctt"
+      ? { title: PCTT_RE }
+      : kind === "chi-dao"
+        ? { kind: "chi-dao" }
+        : { kind: { $in: ["tin-tuc", null] } };
+  return News.find(filter).sort({ nid: -1 }).limit(limit).lean();
 }
 
 function startAutoSync() {
@@ -248,6 +324,7 @@ function startAutoSync() {
 
 module.exports = {
   fetchListing,
+  parseListing,
   syncNews,
   listNews,
   startAutoSync,

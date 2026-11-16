@@ -11,17 +11,16 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
   Hóa, Cao Quảng, Văn Hóa; diện tích 194,92 km², dân số 21.452 người — lấy từ
   bộ giao diện `TuyenHoaSo-XanhDuong/DOC-TRUOC.txt`. Cần đối chiếu số liệu chính
   thức (seed ở `Backend/scripts/seed-site-content.js` → collection `DanSo`).
-- [ ] **Danh sách thôn** — `Backend/src/data/villages.js` đang để **rỗng** (chưa
-  có văn bản của xã). Điền tên thôn chính thức hoặc nhập qua AdminWeb → Thôn xóm.
-  Trang chủ hiện "—" ở ô "Thôn" cho tới khi có dữ liệu.
-- [ ] **Thông tin liên hệ** (`SiteInfo.contact`, sửa qua AdminWeb/DB): địa chỉ
-  trụ sở, số điện thoại (`hotline`, `hotline2`), website, email, giờ làm việc,
-  Công an xã (`policeStation.name/address/phone` — số trực ban), số Ban Chỉ huy
-  PCTT&TKCN xã (`pcttPhone`, màn Phòng chống thiên tai), bản đồ số `.gov.vn` của
-  tỉnh (`mapUrl`, nút "Chỉ đường" + ô "Bản đồ số"). Trường trống thì MiniApp ẩn
-  hoặc hiện "Đang cập nhật".
-- [ ] Trang điều khoản `GET /dieu-khoan-su-dung` (`Backend/src/app.js`): điền
-  địa chỉ + hotline thật ở mục "9. Liên hệ" (đang để `[TODO: ...]`).
+- [x] **Danh sách thôn** — 11 thôn do xã cung cấp (13/11/2026) trong
+  `Backend/src/data/villages.js`, tự thêm vào DB khi Backend khởi động.
+- [ ] **Thông tin từng thôn** — bí thư, thôn trưởng, TBCT Mặt trận, số hộ, dân
+  số: nhập ở AdminWeb → Thôn xóm (MiniApp hiện "Đang cập nhật" khi trống).
+- [x] **Thông tin liên hệ** (16/11/2026): địa chỉ Thôn Tiền Phong, ĐT 0232 3672 112,
+  email ubndtuyenhoa@quangtri.gov.vn, website tuyenhoa.quangtri.gov.vn, Công an
+  xã 0232 3690 168 — DB đang chạy: `node Backend/scripts/update-contact.js`.
+- [ ] Liên hệ còn thiếu: hotline thứ 2, giờ làm việc thật, Chủ tịch xã, số Ban
+  Chỉ huy PCTT&TKCN (`pcttPhone`), bản đồ số `.gov.vn` (`mapUrl`).
+- [x] Trang điều khoản `GET /dieu-khoan-su-dung`: đã điền địa chỉ + điện thoại.
 - [ ] Tọa độ bản đồ ở trang đăng nhập AdminWeb (`LoginPage.jsx`, `LAT/LNG`) đang
   là giá trị **gần đúng** — xác nhận trên OpenStreetMap.
 
@@ -75,13 +74,17 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
   Phản ánh dùng **mã tự cấp 6 chữ số** (`services/feedbackCodeService.js`,
   bắt đầu từ 100001), nhắn kèm trong tin cảm ơn qua Zalo, tra cứu được ở
   "Phản ánh của tôi". Nếu tỉnh có hệ thống tương tự thì viết service riêng.
-- [ ] **Lịch cắt điện**: xác định điện lực phụ trách xã (EVN CPC — PC Quảng
-  Trị/đơn vị cũ Quảng Bình) → `XENVN_URL` hoặc `EVNCPC_ORG_CODE/SUBORG_CODE`.
-  Trống thì đồng bộ tự bỏ qua, màn hình hiện danh sách rỗng. Không đoán mã.
-- [ ] **Tin tức / Văn bản** từ trang TTĐT xã: xác nhận URL rồi KIỂM TRA cấu trúc
-  HTML — `newsScrapeService.js` và `vanBanTuyenHoaService.js` được viết cho
-  portal VNPT của các xã Đà Nẵng, có thể phải viết lại parser. Khi chưa có,
-  Trang chủ ẩn khối Tin tức, màn Văn bản rỗng.
+- [x] **Lịch cắt điện**: cào xenvn.com, Điện lực Tuyên Hóa (`pc01ee`) — mặc
+  định trong `config/index.js` (`XENVN_URL`), 3 lần/ngày. Trang gồm trạm của cả
+  điện lực (nhiều xã), MiniApp lọc theo Khu vực.
+- [x] **Tin tức** (Tin tức - Sự kiện) + **Chỉ đạo điều hành** (tab trong màn
+  Thông báo, `/thong-bao?tab=chi-dao`) + **tin thiên tai** ở màn PCTT: cào
+  tuyenhoa.quangtri.gov.vn (nền 3cms Quảng Trị) — `newsScrapeService.js`, 3
+  lần/ngày. Tin chỉ đạo cũng đi qua luồng đăng bài/gửi thẻ tin Zalo OA như tin tức
+  (khi các cờ `ZALO_ARTICLE_*` bật).
+- [ ] **Văn bản**: trang xã có mục "VB điều hành" (`/vb-ieu-hanh`) nhưng
+  `vanBanTuyenHoaService.js` vẫn là parser VNPT cũ — cần viết lại trước khi điền
+  `VAN_BAN_SOURCE_URL`.
 - [ ] **Tra cứu hồ sơ TTHC**: chưa có API của tỉnh → bấm "Tra cứu" sao chép mã
   và mở Cổng DVC Quốc gia. Ô "Mã bảo mật" + khối "Kết quả tra cứu" trong bộ
   thiết kế chờ có API thật.

@@ -44,22 +44,31 @@ const VAN_HOA = {
   tinTuc: [],
 };
 
-// TODO: thông tin liên hệ thật của UBND xã Tuyên Hóa (địa chỉ trụ sở, số điện
-// thoại, website, giờ làm việc, Công an xã) — xem docs/SETUP_CHECKLIST.md. Để
-// trống thì MiniApp tự ẩn dòng tương ứng; cán bộ cập nhật trong DB/AdminWeb.
+// Thông tin liên hệ do xã cung cấp (16/11/2026). Còn trống: hotline thứ 2, số
+// Ban Chỉ huy PCTT, Chủ tịch xã, bản đồ số — MiniApp tự ẩn dòng trống; cán bộ
+// cập nhật trong DB/AdminWeb. DB đã seed thì chạy scripts/update-contact.js.
+const CONTACT = {
+  officeName: "UBND xã Tuyên Hóa",
+  address: "Thôn Tiền Phong, xã Tuyên Hóa, tỉnh Quảng Trị",
+  phone: "0232 3672 112",
+  hotline: "0232 3672 112",
+  email: "ubndtuyenhoa@quangtri.gov.vn",
+  website: "https://tuyenhoa.quangtri.gov.vn",
+  policeStation: {
+    name: "Công an xã Tuyên Hóa",
+    address: "Thôn Tiền Phong, xã Tuyên Hóa, tỉnh Quảng Trị",
+    phone: "0232 3690 168",
+  },
+};
+
 const SITE_INFO = {
   contact: {
-    officeName: "UBND xã Tuyên Hóa",
-    address: "",
-    phone: "",
-    hotline: "",
+    ...CONTACT,
     hotline2: "",
-    email: "",
-    website: "",
     // Theo bộ thiết kế (màn Liên hệ) — TODO: xác nhận giờ làm việc thật của xã.
     workHours: "Thứ 2 - Thứ 6\nSáng: 7h30-11h30 | Chiều: 13h30-17h00",
     chairman: { name: "", title: "Chủ tịch UBND xã Tuyên Hóa", phone: "" },
-    policeStation: { name: "Công an xã Tuyên Hóa", address: "", phone: "" },
+    policeStation: CONTACT.policeStation,
     // Bản đồ số .gov.vn của tỉnh cho nút "Chỉ đường" (màn Liên hệ) — trống thì ẩn nút.
     mapUrl: "",
   },
@@ -74,7 +83,7 @@ const SITE_INFO = {
   },
 };
 
-module.exports = { VILLAGES, DAN_SO, DU_LICH, VAN_HOA, SITE_INFO };
+module.exports = { VILLAGES, DAN_SO, DU_LICH, VAN_HOA, SITE_INFO, CONTACT };
 
 async function main() {
   await mongoose.connect(config.mongoUri);
