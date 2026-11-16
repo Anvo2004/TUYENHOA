@@ -21,8 +21,8 @@ import SITE from "../data/site.js";
 
 // Trang chủ theo bộ giao diện "Tuyên Hóa Số" (01-TrangChu): header ảnh nền chạy
 // luân phiên + ô tìm kiếm (kèm nút quét QR), dưới ảnh là thẻ "TUYÊN HÓA SỐ" với
-// 3 số liệu (từ /api/public/dan-so), rồi 3 lưới
-// icon lấy từ AppLink (DB, AdminWeb quản lý): quick_link · gov · econ.
+// 3 số liệu (từ /api/public/dan-so), rồi 1 lưới "Tiện ích" gộp 3 nhóm
+// AppLink (DB, AdminWeb quản lý): quick_link · gov · econ.
 // Tin tức (cào trang TTĐT xã) chỉ hiện khi đã có dữ liệu — bản thiết kế không
 // có khối này, nhưng giữ để không mất tính năng khi xã bật nguồn tin.
 const HomePage = () => {
@@ -34,6 +34,9 @@ const HomePage = () => {
   const quick = useAppLinks("quick_link");
   const gov = useAppLinks("gov");
   const econ = useAppLinks("econ");
+  // Gộp 3 nhóm thành 1 lưới "Tiện ích" — chỉ hiện khi cả 3 đã tải xong để thứ
+  // tự icon không nhảy. Vẫn giữ 3 section trong DB để AdminWeb sắp xếp theo nhóm.
+  const tienIch = quick && gov && econ ? [...quick, ...gov, ...econ] : [];
 
   const [danSo, setDanSo] = useState({});
 
@@ -84,21 +87,9 @@ const HomePage = () => {
       </section>
 
 
-      {quick?.length > 0 && (
-        <ThSection title="Tiện ích nhanh" action={<MoreLink onClick={() => navigate("/dich-vu")}>Xem tất cả</MoreLink>}>
-          <ThLinkGrid items={quick} onOpen={openLink} />
-        </ThSection>
-      )}
-
-      {gov?.length > 0 && (
-        <ThSection title="Chính quyền số">
-          <ThLinkGrid items={gov} onOpen={openLink} />
-        </ThSection>
-      )}
-
-      {econ?.length > 0 && (
-        <ThSection title="Kinh tế · Văn hóa · Học tập">
-          <ThLinkGrid items={econ} onOpen={openLink} />
+      {tienIch.length > 0 && (
+        <ThSection title="Tiện ích">
+          <ThLinkGrid items={tienIch} onOpen={openLink} />
         </ThSection>
       )}
 

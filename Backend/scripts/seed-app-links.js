@@ -7,9 +7,11 @@ const config = require("../src/config");
 const AppLink = require("../src/models/AppLink");
 
 // Theo bộ giao diện "Tuyên Hóa Số" (TuyenHoaSo-XanhDuong, màn Trang chủ + Dịch vụ).
+// Trang chủ gộp quick_link + gov + econ thành 1 lưới "Tiện ích" (16/11/2026 xã bỏ
+// OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát).
 // `icon` là slug trong MiniApp/src/static/th-icons/. Link ngoài CHỈ dùng cổng
-// quốc gia .gov.vn đã biết chắc; mục đặc thù của xã/tỉnh (bản đồ số, camera,
-// OCOP, khảo sát...) để href rỗng — MiniApp báo "đang cập nhật" — cán bộ điền
+// quốc gia .gov.vn đã biết chắc; mục đặc thù của xã/tỉnh (bản đồ số, lãnh đạo
+// xã, QR tài liệu...) để href rỗng — MiniApp báo "đang cập nhật" — cán bộ điền
 // qua AdminWeb khi xã xác nhận URL (xem docs/SETUP_CHECKLIST.md). Không đoán URL.
 const QUICK_LINKS = [
   { icon: "phan-anh", label: "Phản ánh", path: "/phan-anh" },
@@ -26,22 +28,17 @@ const GOV_LINKS = [
   { icon: "lanh-dao", label: "Lãnh đạo xã", href: "" }, // TODO: trang giới thiệu lãnh đạo xã
   { icon: "tro-ly-ai", label: "Trợ lý AI", path: "/tro-ly-so" },
   { icon: "ban-do", label: "Bản đồ số", href: "" }, // TODO: bản đồ số của tỉnh Quảng Trị (.gov.vn)
-  { icon: "camera", label: "Camera an ninh", href: "" }, // TODO
-  { icon: "cong-du-lieu", label: "Cổng dữ liệu", path: "/cong-du-lieu" },
   { icon: "qr-tai-lieu", label: "QR tài liệu", href: "" }, // TODO
-  { icon: "khao-sat", label: "Khảo sát", path: "/cong-du-lieu" },
   { icon: "dvc-quoc-gia", label: "DVC Quốc gia", href: "https://dichvucong.gov.vn" },
 ];
 
 const ECON_LINKS = [
-  { icon: "ocop", label: "OCOP", href: "" }, // TODO
   { icon: "doanh-nghiep", label: "Doanh nghiệp", href: "https://dangkykinhdoanh.gov.vn" },
   { icon: "du-lich", label: "Du lịch", path: "/du-lich" },
   { icon: "van-hoa", label: "Văn hóa", path: "/van-hoa" },
   { icon: "hoc-ai", label: "Học AI", href: "" }, // TODO
-  { icon: "hoc-vu-so", label: "Học vụ số", href: "" }, // TODO
-  { icon: "bhxh", label: "BHXH", href: "https://baohiemxahoi.gov.vn" },
-  { icon: "ma-so-thue", label: "Mã số thuế", href: "https://tracuunnt.gdt.gov.vn" },
+  // Nền tảng "Bình dân học vụ số" — link xã gửi 16/11/2026 (share.google → binhdanhocvuso.gov.vn).
+  { icon: "hoc-vu-so", label: "Học vụ số", href: "https://binhdanhocvuso.gov.vn" },
 ];
 
 // Trang /dich-vu — "Danh sách dịch vụ" (type: online = Trực tuyến, offline = Trực tiếp)

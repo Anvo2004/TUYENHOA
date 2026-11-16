@@ -28,6 +28,9 @@ app.use("/media", express.static(config.mediaDir));
 app.use("/images", express.static(path.join(__dirname, "..", "public", "images")));
 // Logo/ảnh thương hiệu dùng làm thumbnail khi chia sẻ Mini App (openShareSheet cần URL tuyệt đối).
 app.use("/brand", express.static(path.join(__dirname, "..", "public", "brand")));
+// Ảnh nội dung có sẵn (trang Du lịch / Văn hóa — seed-site-content.js), commit vào git
+// (khác public/images là ảnh cán bộ tải lên, nằm ngoài git).
+app.use("/site", express.static(path.join(__dirname, "..", "public", "site"), { maxAge: "7d" }));
 
 app.get("/health", (req, res) => res.json({ error: 0, message: "ok" }));
 app.post("/health", (req, res) => res.json({ error: 0, message: "ok" }));

@@ -97,9 +97,18 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
   trống), Du lịch/Văn hóa trống (không mang nội dung xã cũ).
 - [ ] `node Backend/scripts/seed-app-links.js` — 3 lưới Trang chủ (Tiện ích
   nhanh / Chính quyền số / Kinh tế · Văn hóa · Học tập), Dịch vụ, Cổng kết nối.
+  Trang chủ gộp 3 nhóm thành **1 lưới "Tiện ích"** (16/11/2026: bỏ OCOP, BHXH,
+  Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát; Học vụ số →
+  binhdanhocvuso.gov.vn — DB đang chạy: `node Backend/scripts/update-home-links.js`).
   Các mục **chưa có link** (bấm vào báo "đang cập nhật"), điền qua AdminWeb →
   Icon & liên kết MiniApp khi xã xác nhận URL `.gov.vn`:
-  Lãnh đạo xã, Bản đồ số, Camera an ninh, QR tài liệu, OCOP, Học AI, Học vụ số.
+  Lãnh đạo xã, Bản đồ số, QR tài liệu, Học AI.
+- [x] **Du lịch / Văn hóa** (16/11/2026): nội dung từ Trang TTĐT xã (Giới thiệu
+  chung + tin Văn hóa - Xã hội: đình Kinh Châu/Uyên Phong, ca trù Kinh Châu, ngày
+  hội, văn nghệ, thể thao), ảnh ở `Backend/public/site/gioi-thieu` —
+  `node Backend/scripts/update-du-lich-van-hoa.js`.
+- [ ] Du lịch: cổng xã chưa có bài về danh thắng/điểm du lịch — cán bộ bổ sung
+  qua AdminWeb (không tự thêm địa danh chưa có nguồn).
 - [ ] **Bộ dữ liệu mở** (màn Cổng dữ liệu): thêm ở AdminWeb → Icon & liên kết →
   nhóm "Bộ dữ liệu mở" (mô tả, định dạng ở ô Badge, link file ở href).
 - [ ] Danh mục thủ tục (`seed-tthc.js` là danh mục chung — rà soát theo xã),
