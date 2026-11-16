@@ -38,7 +38,7 @@
 
 /* ---------- Header xanh (Trang chủ + trang con) ---------- */
 .th-hdr{position:relative;overflow:hidden;background:linear-gradient(160deg,#1E56E0 0%,#1646C8 52%,#0F3AAE 100%);border-radius:0 0 32px 32px;padding:var(--th-top) 18px 62px;color:#fff}
-.th-hdr--home{padding-bottom:22px}
+.th-hdr--home{padding-bottom:120px}
 /* Ảnh nền Trang chủ chạy luân phiên: 3 ảnh x 6s, mờ dần sang nhau + phóng nhẹ. */
 .th-hdr__slides{position:absolute;inset:0;pointer-events:none}
 .th-hdr__slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:th-slide 18s linear infinite}
@@ -68,6 +68,8 @@
 .th-hdr__art{position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:84px;height:84px;filter:drop-shadow(0 10px 14px rgba(6,24,90,.28))}
 .th-search{height:50px;padding:0 8px 0 16px;border-radius:16px;background:#fff;border:0;box-shadow:0 10px 24px rgba(6,24,90,.22);display:flex;align-items:center;gap:10px}
 .th-search--flat{border:1px solid var(--th-line);box-shadow:var(--th-card-shadow)}
+.th-search__qr{width:38px;height:38px;flex-shrink:0;border:0;border-radius:12px;background:linear-gradient(160deg,#2563EB,#0F3AAE);color:#fff;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 4px 10px rgba(15,58,174,.3)}
+.th-search__qr:active{transform:scale(.94)}
 .th-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:14.5px;color:var(--th-text);padding:0;-webkit-appearance:none;appearance:none}
 
 /* Khối nổi chồng lên đáy header */
@@ -81,10 +83,8 @@
 .th-hero::before{content:"";position:absolute;right:-50px;top:-60px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.10)}
 .th-hero::after{content:"";position:absolute;right:40px;bottom:-70px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
 .th-hero>*{position:relative;z-index:1}
-/* Thẻ kính trong header Trang chủ: nền trong để ảnh phía sau nổi rõ. */
-.th-hero--glass{background:linear-gradient(120deg,rgba(12,45,150,.30) 0%,rgba(37,99,235,.18) 60%,rgba(20,184,166,.20) 100%);border:1px solid rgba(255,255,255,.32);box-shadow:0 10px 24px rgba(4,20,70,.22);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);text-shadow:0 1px 4px rgba(4,20,70,.5)}
-.th-hero--glass::before,.th-hero--glass::after{display:none}
-.th-hero--glass .th-stat{background:rgba(6,25,90,.22);border-color:rgba(255,255,255,.28);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+/* Thẻ "Tuyên Hóa Số" ngay dưới khung ảnh Trang chủ. */
+.th-hero--home{margin:16px 16px 0}
 .th-hero__kicker{font-size:11px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.85)}
 .th-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
 .th-stat{padding:10px 4px;border-radius:14px;background:rgba(9,35,120,.36);border:1px solid rgba(255,255,255,.18);display:flex;flex-direction:column;align-items:center;gap:1px;text-align:center}
