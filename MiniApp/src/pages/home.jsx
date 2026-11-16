@@ -19,8 +19,9 @@ import { openExternal } from "../utils/open-external.js";
 import useNews from "../data/use-news.js";
 import SITE from "../data/site.js";
 
-// Trang chủ theo bộ giao diện "Tuyên Hóa Số" (01-TrangChu): header xanh + ô tìm
-// kiếm, thẻ "TUYÊN HÓA SỐ" với 3 số liệu (từ /api/public/dan-so), rồi 3 lưới
+// Trang chủ theo bộ giao diện "Tuyên Hóa Số" (01-TrangChu): header ảnh nền chạy
+// luân phiên chứa ô tìm kiếm + thẻ kính "TUYÊN HÓA SỐ" với 3 số liệu (từ
+// /api/public/dan-so) — thẻ nằm trong header để ảnh hiện xuyên qua, rồi 3 lưới
 // icon lấy từ AppLink (DB, AdminWeb quản lý): quick_link · gov · econ.
 // Tin tức (cào trang TTĐT xã) chỉ hiện khi đã có dữ liệu — bản thiết kế không
 // có khối này, nhưng giữ để không mất tính năng khi xã bật nguồn tin.
@@ -50,37 +51,37 @@ const HomePage = () => {
     <ThPage>
       <ThHomeHeader>
         <HomeSearch onMissing={() => showToast("Tiện ích đang được cập nhật")} />
+        <section className="th-hero th-hero--glass">
+          <div>
+            <img
+              src={thIcon("tru-so")}
+              alt=""
+              width="92"
+              height="92"
+              style={{ position: "absolute", right: -10, top: -12, filter: "drop-shadow(0 10px 14px rgba(6,24,90,.3))" }}
+            />
+            <div style={{ paddingRight: 84, display: "flex", flexDirection: "column", gap: 4 }}>
+              <span className="th-hero__kicker">{SITE.appName.toUpperCase()}</span>
+              <h2 style={{ fontSize: 19, lineHeight: 1.3, fontWeight: 800 }}>{SITE.slogan}</h2>
+            </div>
+            <div className="th-stats">
+              <div className="th-stat">
+                <strong>{fmtInt(pop)}</strong>
+                <span>Dân số (người)</span>
+              </div>
+              <div className="th-stat">
+                <strong>{danSo.soThon ? fmtInt(danSo.soThon) : "—"}</strong>
+                <span>Thôn</span>
+              </div>
+              <div className="th-stat">
+                <strong>{fmtDec(area)}</strong>
+                <span>Diện tích (km²)</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </ThHomeHeader>
 
-      <section className="th-hero th-float th-float--64">
-        <div>
-          <img
-            src={thIcon("tru-so")}
-            alt=""
-            width="92"
-            height="92"
-            style={{ position: "absolute", right: -10, top: -12, filter: "drop-shadow(0 10px 14px rgba(6,24,90,.3))" }}
-          />
-          <div style={{ paddingRight: 84, display: "flex", flexDirection: "column", gap: 4 }}>
-            <span className="th-hero__kicker">{SITE.appName.toUpperCase()}</span>
-            <h2 style={{ fontSize: 19, lineHeight: 1.3, fontWeight: 800 }}>{SITE.slogan}</h2>
-          </div>
-          <div className="th-stats">
-            <div className="th-stat">
-              <strong>{fmtInt(pop)}</strong>
-              <span>Dân số (người)</span>
-            </div>
-            <div className="th-stat">
-              <strong>{danSo.soThon ? fmtInt(danSo.soThon) : "—"}</strong>
-              <span>Thôn</span>
-            </div>
-            <div className="th-stat">
-              <strong>{fmtDec(area)}</strong>
-              <span>Diện tích (km²)</span>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {quick?.length > 0 && (
         <ThSection title="Tiện ích nhanh" action={<MoreLink onClick={() => navigate("/dich-vu")}>Xem tất cả</MoreLink>}>
