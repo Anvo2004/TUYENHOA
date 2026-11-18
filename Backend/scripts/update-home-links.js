@@ -30,6 +30,11 @@ async function main() {
         console.log(`[${section}] thêm "${link.label}"`);
       }
     }
+    // Đồng bộ href các mục link ngoài theo seed (vd sửa link Tòa án 19/11/2026).
+    for (const link of seed.filter((l) => l.href)) {
+      const r = await AppLink.updateMany({ section, label: link.label, href: { $ne: link.href } }, { $set: { href: link.href } });
+      if (r.modifiedCount) console.log(`[${section}] "${link.label}" → ${link.href}`);
+    }
     const rank = (label) => {
       const i = seed.findIndex((l) => l.label === label);
       return i === -1 ? 1000 : i;

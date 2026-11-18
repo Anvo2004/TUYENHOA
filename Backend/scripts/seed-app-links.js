@@ -33,7 +33,9 @@ const GOV_LINKS = [
   // 18/11/2026 — các trang tra cứu của Cổng DVC Quốc gia (đường dẫn lấy từ bảng
   // route trong bundle dichvucong.gov.vn) + Thuế điện tử (Cục Thuế).
   { icon: "ket-qua-tthc", label: "Kết quả TTHC", href: "https://dichvucong.gov.vn/tra-cuu-ho-so" },
-  { icon: "toa-an", label: "Tòa án nhân dân", href: "https://dichvucong.gov.vn/p/home/dvc-tra-cuu-ban-an.html" },
+  // Trang tra cứu bản án cũ của Cổng DVC (/p/home/dvc-tra-cuu-ban-an.html) đã bị gỡ khi
+  // Cổng DVC chuyển giao diện mới → dùng Cổng công bố bản án, quyết định của TANDTC.
+  { icon: "toa-an", label: "Tòa án nhân dân", href: "https://congbobanan.toaan.gov.vn" },
   { icon: "tra-cuu-pakn", label: "Kết quả PAKN", href: "https://dichvucong.gov.vn/tra-cuu-phan-anh-kien-nghi" },
   { icon: "danh-gia", label: "Đánh giá phục vụ", href: "https://dichvucong.gov.vn/danh-gia-chat-luong-phuc-vu" },
   { icon: "ma-so-thue", label: "Thuế điện tử", href: "https://thuedientu.gdt.gov.vn" },
