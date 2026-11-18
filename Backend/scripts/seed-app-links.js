@@ -30,6 +30,13 @@ const GOV_LINKS = [
   { icon: "ban-do", label: "Bản đồ số", href: "" }, // TODO: bản đồ số của tỉnh Quảng Trị (.gov.vn)
   { icon: "qr-tai-lieu", label: "QR tài liệu", href: "" }, // TODO
   { icon: "dvc-quoc-gia", label: "DVC Quốc gia", href: "https://dichvucong.gov.vn" },
+  // 18/11/2026 — các trang tra cứu của Cổng DVC Quốc gia (đường dẫn lấy từ bảng
+  // route trong bundle dichvucong.gov.vn) + Thuế điện tử (Cục Thuế).
+  { icon: "ket-qua-tthc", label: "Kết quả TTHC", href: "https://dichvucong.gov.vn/tra-cuu-ho-so" },
+  { icon: "toa-an", label: "Tòa án nhân dân", href: "https://dichvucong.gov.vn/p/home/dvc-tra-cuu-ban-an.html" },
+  { icon: "tra-cuu-pakn", label: "Kết quả PAKN", href: "https://dichvucong.gov.vn/tra-cuu-phan-anh-kien-nghi" },
+  { icon: "danh-gia", label: "Đánh giá phục vụ", href: "https://dichvucong.gov.vn/danh-gia-chat-luong-phuc-vu" },
+  { icon: "ma-so-thue", label: "Thuế điện tử", href: "https://thuedientu.gdt.gov.vn" },
 ];
 
 const ECON_LINKS = [

@@ -2,12 +2,14 @@
 // section đã có dữ liệu) theo yêu cầu xã 16/11/2026:
 //   - Bỏ OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát, Học AI.
 //   - Gán link "Học vụ số" (lấy từ ECON_LINKS trong seed-app-links.js).
-//   - Đánh lại thứ tự từng nhóm gov / econ cho liền mạch.
+//   - Thêm mục mới có trong seed mà DB chưa có (so theo label) — vd 18/11/2026:
+//     Kết quả TTHC, Tòa án nhân dân, Kết quả PAKN, Đánh giá phục vụ, Thuế điện tử.
+//   - Đánh lại thứ tự từng nhóm gov / econ theo thứ tự seed (mục cán bộ tự thêm xếp sau).
 // An toàn để chạy lại. Chạy trên VPS: cd Backend && node scripts/update-home-links.js
 const mongoose = require("mongoose");
 const config = require("../src/config");
 const AppLink = require("../src/models/AppLink");
-const { ECON_LINKS } = require("./seed-app-links");
+const { GOV_LINKS, ECON_LINKS } = require("./seed-app-links");
 
 const REMOVED = ["OCOP", "BHXH", "Mã số thuế", "Cổng dữ liệu", "Camera an ninh", "Khảo sát", "Học AI"];
 
@@ -21,8 +23,18 @@ async function main() {
   const upd = await AppLink.updateMany({ section: "econ", label: "Học vụ số" }, { $set: { href: hocVuSo.href, path: "" } });
   console.log(`Học vụ số → ${hocVuSo.href} (${upd.modifiedCount} bản ghi)`);
 
-  for (const section of ["gov", "econ"]) {
-    const items = await AppLink.find({ section }).sort({ order: 1, label: 1 });
+  for (const [section, seed] of [["gov", GOV_LINKS], ["econ", ECON_LINKS]]) {
+    for (const link of seed) {
+      if (!(await AppLink.exists({ section, label: link.label }))) {
+        await AppLink.create({ ...link, section, order: 999 });
+        console.log(`[${section}] thêm "${link.label}"`);
+      }
+    }
+    const rank = (label) => {
+      const i = seed.findIndex((l) => l.label === label);
+      return i === -1 ? 1000 : i;
+    };
+    const items = (await AppLink.find({ section }).sort({ order: 1, label: 1 })).sort((a, b) => rank(a.label) - rank(b.label));
     await Promise.all(items.map((it, i) => AppLink.updateOne({ _id: it._id }, { $set: { order: i + 1 } })));
     console.log(`[${section}]`, items.map((it) => it.label).join(" · "));
   }
