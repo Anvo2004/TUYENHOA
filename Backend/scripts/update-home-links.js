@@ -1,6 +1,7 @@
 // Cập nhật lưới "Tiện ích" Trang chủ trên DB đang chạy (seed-app-links.js bỏ qua
 // section đã có dữ liệu) theo yêu cầu xã 16/11/2026:
-//   - Bỏ OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát, Học AI.
+//   - Bỏ OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát, Học AI,
+//     Tra cứu hồ sơ (trùng Kết quả TTHC), QR tài liệu.
 //   - Gán link "Học vụ số" (lấy từ ECON_LINKS trong seed-app-links.js).
 //   - Thêm mục mới có trong seed mà DB chưa có (so theo label) — vd 18/11/2026:
 //     Kết quả TTHC, Tòa án nhân dân, Kết quả PAKN, Đánh giá phục vụ, Thuế điện tử.
@@ -9,9 +10,9 @@
 const mongoose = require("mongoose");
 const config = require("../src/config");
 const AppLink = require("../src/models/AppLink");
-const { GOV_LINKS, ECON_LINKS } = require("./seed-app-links");
+const { GOV_LINKS, ECON_LINKS, SERVICES } = require("./seed-app-links");
 
-const REMOVED = ["OCOP", "BHXH", "Mã số thuế", "Cổng dữ liệu", "Camera an ninh", "Khảo sát", "Học AI"];
+const REMOVED = ["OCOP", "BHXH", "Mã số thuế", "Cổng dữ liệu", "Camera an ninh", "Khảo sát", "Học AI", "Tra cứu hồ sơ", "QR tài liệu"];
 
 async function main() {
   await mongoose.connect(config.mongoUri);
@@ -43,6 +44,14 @@ async function main() {
     await Promise.all(items.map((it, i) => AppLink.updateOne({ _id: it._id }, { $set: { order: i + 1 } })));
     console.log(`[${section}]`, items.map((it) => it.label).join(" · "));
   }
+
+  // Mục Dịch vụ "Tra cứu hồ sơ TTHC" → mở thẳng Cổng DVC như "Kết quả TTHC".
+  const svc = SERVICES.find((l) => l.label === "Tra cứu hồ sơ TTHC");
+  const r = await AppLink.updateMany(
+    { section: "service", label: svc.label, href: { $ne: svc.href } },
+    { $set: { href: svc.href, path: "", icon: svc.icon } }
+  );
+  if (r.modifiedCount) console.log(`[service] "${svc.label}" → ${svc.href}`);
 
   await mongoose.disconnect();
 }

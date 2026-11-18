@@ -1,21 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { scanQRCode } from "zmp-sdk/apis";
 import API_BASE_URL from "../data/api-config.js";
 import { openExternal } from "../utils/open-external.js";
 import { Ic, LinkIcon, Th3 } from "./th/th-ui.jsx";
 
 // Ô tìm kiếm trong header Trang chủ (bộ giao diện Tuyên Hóa Số): tìm trong các
 // mục AppLink (3 lưới Trang chủ + danh sách Dịch vụ), thông báo và danh mục TTHC.
-// Nút QR bên phải: quét bằng camera Zalo (scanQRCode) — mã là link http(s) thì
-// mở bằng webview, còn lại sao chép nội dung và báo cho người dùng.
 const LINK_SECTIONS = ["quick_link", "gov", "econ", "service"];
 
 function matches(text, q) {
   return (text || "").toLowerCase().includes(q);
 }
 
-const HomeSearch = ({ onMissing, onNotify }) => {
+const HomeSearch = ({ onMissing }) => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [notices, setNotices] = useState([]);
@@ -96,31 +93,6 @@ const HomeSearch = ({ onMissing, onNotify }) => {
 
   const iconBox = { width: 34, height: 34, borderRadius: 11 };
 
-  const scan = async () => {
-    let content = "";
-    try {
-      ({ content } = await scanQRCode());
-    } catch (err) {
-      // Người dùng đóng camera → bỏ qua; ngoài app Zalo (bản web) thì không có camera Zalo.
-      if (!/cancel|hủy|huỷ/i.test(String(err?.message || err))) {
-        onNotify?.("Chỉ quét mã QR được khi mở trong ứng dụng Zalo");
-      }
-      return;
-    }
-    content = (content || "").trim();
-    if (!content) return;
-    if (/^https?:\/\//i.test(content)) {
-      openExternal(content);
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(content);
-      onNotify?.(`Đã sao chép nội dung mã QR: ${content.slice(0, 60)}`);
-    } catch {
-      onNotify?.(`Nội dung mã QR: ${content.slice(0, 80)}`);
-    }
-  };
-
   return (
     <div style={{ position: "relative" }} ref={boxRef}>
       <label role="search" className="th-search">
@@ -132,17 +104,6 @@ const HomeSearch = ({ onMissing, onNotify }) => {
           onFocus={() => setFocused(true)}
           placeholder="Tìm dịch vụ, thủ tục, thông báo…"
         />
-        <button
-          type="button"
-          aria-label="Quét mã QR"
-          className="th-search__qr"
-          onClick={(e) => {
-            e.preventDefault(); // không focus ô nhập khi bấm nút trong <label>
-            scan();
-          }}
-        >
-          <Ic n="qr" size={20} sw={2} />
-        </button>
       </label>
 
       {focused && q && (

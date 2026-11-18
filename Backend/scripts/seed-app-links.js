@@ -8,14 +8,14 @@ const AppLink = require("../src/models/AppLink");
 
 // Theo bộ giao diện "Tuyên Hóa Số" (TuyenHoaSo-XanhDuong, màn Trang chủ + Dịch vụ).
 // Trang chủ gộp quick_link + gov + econ thành 1 lưới "Tiện ích" (16/11/2026 xã bỏ
-// OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát, Học AI).
+// OCOP, BHXH, Mã số thuế, Cổng dữ liệu, Camera an ninh, Khảo sát, Học AI;
+// 19/11/2026 bỏ Tra cứu hồ sơ (trùng Kết quả TTHC), QR tài liệu).
 // `icon` là slug trong MiniApp/src/static/th-icons/. Link ngoài CHỈ dùng cổng
 // quốc gia .gov.vn đã biết chắc; mục đặc thù của xã/tỉnh (bản đồ số, lãnh đạo
 // xã, QR tài liệu...) để href rỗng — MiniApp báo "đang cập nhật" — cán bộ điền
 // qua AdminWeb khi xã xác nhận URL (xem docs/SETUP_CHECKLIST.md). Không đoán URL.
 const QUICK_LINKS = [
   { icon: "phan-anh", label: "Phản ánh", path: "/phan-anh" },
-  { icon: "tra-cuu-ho-so", label: "Tra cứu hồ sơ", path: "/tra-cuu-ho-so" },
   { icon: "lich-cat-dien", label: "Lịch cắt điện", path: "/lich-cup-dien" },
   { icon: "lich-y-te", label: "Lịch y tế", path: "/lich-y-te" },
   { icon: "thu-tuc", label: "Thủ tục", path: "/thu-tuc-hanh-chinh" },
@@ -28,7 +28,6 @@ const GOV_LINKS = [
   { icon: "lanh-dao", label: "Lãnh đạo xã", path: "/lanh-dao" },
   { icon: "tro-ly-ai", label: "Trợ lý AI", path: "/tro-ly-so" },
   { icon: "ban-do", label: "Bản đồ số", href: "" }, // TODO: bản đồ số của tỉnh Quảng Trị (.gov.vn)
-  { icon: "qr-tai-lieu", label: "QR tài liệu", href: "" }, // TODO
   { icon: "dvc-quoc-gia", label: "DVC Quốc gia", href: "https://dichvucong.gov.vn" },
   // 18/11/2026 — các trang tra cứu của Cổng DVC Quốc gia (đường dẫn lấy từ bảng
   // route trong bundle dichvucong.gov.vn) + Thuế điện tử (Cục Thuế).
@@ -52,7 +51,7 @@ const ECON_LINKS = [
 // Trang /dich-vu — "Danh sách dịch vụ" (type: online = Trực tuyến, offline = Trực tiếp)
 const SERVICES = [
   { icon: "phan-anh", label: "Phản ánh – Kiến nghị", type: "online", path: "/phan-anh" },
-  { icon: "tra-cuu-ho-so", label: "Tra cứu hồ sơ TTHC", type: "online", path: "/tra-cuu-ho-so" },
+  { icon: "ket-qua-tthc", label: "Tra cứu hồ sơ TTHC", type: "online", href: "https://dichvucong.gov.vn/tra-cuu-ho-so" },
   { icon: "van-ban", label: "Văn bản – Chính sách", type: "online", path: "/van-ban" },
   { icon: "lich-cat-dien", label: "Lịch cắt điện", type: "online", path: "/lich-cup-dien" },
   { icon: "lich-y-te", label: "Lịch y tế – Tiêm chủng", type: "online", path: "/lich-y-te" },

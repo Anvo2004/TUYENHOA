@@ -20,7 +20,7 @@ import useNews from "../data/use-news.js";
 import SITE from "../data/site.js";
 
 // Trang chủ theo bộ giao diện "Tuyên Hóa Số" (01-TrangChu): header ảnh nền chạy
-// luân phiên + ô tìm kiếm (kèm nút quét QR), dưới ảnh là thẻ "TUYÊN HÓA SỐ" với
+// luân phiên + ô tìm kiếm, dưới ảnh là thẻ "TUYÊN HÓA SỐ" với
 // 3 số liệu (từ /api/public/dan-so), rồi 1 lưới "Tiện ích" gộp 3 nhóm
 // AppLink (DB, AdminWeb quản lý): quick_link · gov · econ.
 // Tin tức (cào trang TTĐT xã) chỉ hiện khi đã có dữ liệu — bản thiết kế không
@@ -53,7 +53,7 @@ const HomePage = () => {
   return (
     <ThPage>
       <ThHomeHeader>
-        <HomeSearch onMissing={() => showToast("Tiện ích đang được cập nhật")} onNotify={showToast} />
+        <HomeSearch onMissing={() => showToast("Tiện ích đang được cập nhật")} />
       </ThHomeHeader>
 
       <section className="th-hero th-hero--home">
