@@ -4,6 +4,7 @@ import API_BASE_URL from "../data/api-config.js";
 import CardMedia from "../components/card-media.jsx";
 import DetailSheet from "../components/detail-sheet.jsx";
 import HeroIcon from "../components/ns/hero-icon.jsx";
+import DiTichBlock from "../components/di-tich-block.jsx";
 
 const DuLichPage = () => {
   const [duLich, setDuLich] = useState(null);
@@ -90,6 +91,9 @@ const DuLichPage = () => {
           ))}
         </div>
       </Box>
+
+      {/* Di tích lịch sử — tra cứu + chỉ đường (màn /di-tich) */}
+      <DiTichBlock />
 
       <DetailSheet item={selected} fallbackIcon="⛰️" onClose={() => setSelected(null)} />
     </Page>

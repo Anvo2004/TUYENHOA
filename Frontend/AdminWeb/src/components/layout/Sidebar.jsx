@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, MessageSquare, Users, LogOut, Settings, Send, Wallet, Stethoscope, FileText, LayoutGrid, Award, Home } from 'lucide-react'
+import { LayoutDashboard, MessageSquare, Users, LogOut, Settings, Send, Wallet, Stethoscope, FileText, LayoutGrid, Award, Home, Landmark, UserRound } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import logoImg from '@/images/logotuyenhoa.png'
@@ -77,6 +77,8 @@ export default function Sidebar() {
           <NavItem to="/thu-tuc-hanh-chinh" icon={FileText} label="Thủ tục hành chính" />
           <NavItem to="/cong-dan" icon={Award} label="Công dân & Tích điểm" />
           <NavItem to="/thon-xom" icon={Home} label="Thôn xóm" />
+          <NavItem to="/lanh-dao" icon={UserRound} label="Lãnh đạo xã" />
+          <NavItem to="/di-tich" icon={Landmark} label="Di tích lịch sử" />
           <NavItem to="/app-links" icon={LayoutGrid} label="Icon & liên kết MiniApp" />
         </div>
 

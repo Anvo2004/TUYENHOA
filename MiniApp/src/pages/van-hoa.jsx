@@ -5,6 +5,7 @@ import CardMedia from "../components/card-media.jsx";
 import DetailSheet from "../components/detail-sheet.jsx";
 import { openExternal } from "../utils/open-external.js";
 import HeroIcon from "../components/ns/hero-icon.jsx";
+import DiTichBlock from "../components/di-tich-block.jsx";
 
 const VanHoaPage = () => {
   const [vanHoa, setVanHoa] = useState(null);
@@ -111,6 +112,9 @@ const VanHoaPage = () => {
           </div>
         </div>
       </Box>
+
+      {/* Di tích lịch sử — tra cứu + chỉ đường (màn /di-tich) */}
+      <DiTichBlock />
 
       {/* Tin tức văn hóa */}
       <Box className="section">

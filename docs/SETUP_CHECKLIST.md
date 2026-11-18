@@ -107,8 +107,18 @@ Dự án fork từ MINIAPP_TRALIEN (2026-11-10). Mọi giá trị đặc thù c�
   chung + tin Văn hóa - Xã hội: đình Kinh Châu/Uyên Phong, ca trù Kinh Châu, ngày
   hội, văn nghệ, thể thao), ảnh ở `Backend/public/site/gioi-thieu` —
   `node Backend/scripts/update-du-lich-van-hoa.js`.
-- [ ] Du lịch: cổng xã chưa có bài về danh thắng/điểm du lịch — cán bộ bổ sung
-  qua AdminWeb (không tự thêm địa danh chưa có nguồn).
+- [x] **Di tích lịch sử** (18/11/2026): 9 di tích xếp hạng theo QĐ 70/QĐ-UBND
+  (tài liệu xã gửi `docs/DI TÍCH ĐỊA BÀN.rar` — không commit) → `src/data/di-tich.js`,
+  màn MiniApp `/di-tich` (tra cứu, mô tả, địa chỉ, chỉ đường) + khối ở Văn hóa/Du lịch,
+  AdminWeb → Di tích lịch sử. Nạp DB: `node Backend/scripts/seed-di-tich-lanh-dao.js`.
+- [ ] Di tích: ảnh chỉ có Lê Trực (album hồ sơ); toạ độ thiếu ở Chùa Lèn Bụt và
+  Mộ Lê Trực (chỉ đường theo tên) — bổ sung ảnh/toạ độ qua AdminWeb.
+- [x] **Lãnh đạo xã** (18/11/2026): 24 người theo Phụ lục I công văn cung cấp
+  thông tin Trang TTĐT + ảnh `docs/Anh.rar` → `src/data/lanh-dao.js`, màn `/lanh-dao`,
+  AdminWeb → Lãnh đạo xã.
+- [ ] Lãnh đạo: thiếu ảnh Trần Mạnh Hùng, Phạm Ngọc Chiến; SĐT Phan Thị Hải Yến
+  trong công văn thiếu số ("091716117"); công văn ghi cả Trần Hoài Nam và Hoàng
+  Trọng Tài là "Chủ tịch HĐND xã" — xác nhận với xã rồi sửa ở AdminWeb.
 - [ ] **Bộ dữ liệu mở** (màn Cổng dữ liệu): thêm ở AdminWeb → Icon & liên kết →
   nhóm "Bộ dữ liệu mở" (mô tả, định dạng ở ô Badge, link file ở href).
 - [ ] Danh mục thủ tục (`seed-tthc.js` là danh mục chung — rà soát theo xã),

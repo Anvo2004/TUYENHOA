@@ -26,10 +26,12 @@ const DAN_SO = {
   doTuoi: null,
 };
 
-// Nội dung Du lịch / Văn hóa (16/11/2026) — CHỈ lấy từ Trang TTĐT xã
-// (tuyenhoa.quangtri.gov.vn): bài "Giới thiệu chung" + tin mục Văn hóa - Xã hội.
-// Cổng xã chưa có bài về danh thắng/điểm du lịch (mục "Lịch sử văn hoá", "Điều
-// kiện tự nhiên" đang trống) — không tự thêm địa danh; cán bộ bổ sung qua AdminWeb.
+// Nội dung Du lịch / Văn hóa — CHỈ lấy từ tài liệu của xã:
+//   - Trang TTĐT xã (16/11/2026): bài "Giới thiệu chung" + tin mục Văn hóa - Xã hội;
+//   - công văn cung cấp thông tin Trang TTĐT (18/11/2026): mục 2.4 Điều kiện tự
+//     nhiên, 2.6 Truyền thống văn hoá, di tích, danh thắng; QĐ 2180/QĐ-BVHTTDL.
+// Danh mục 9 di tích xếp hạng nằm ở collection DiTich (src/data/di-tich.js), hai
+// màn Du lịch / Văn hóa hiện khối "Di tích lịch sử" lấy từ /api/public/di-tich.
 // Ảnh: tải từ bài viết, thu nhỏ, lưu Backend/public/site/gioi-thieu (route /site).
 // DB đã seed thì chạy scripts/update-du-lich-van-hoa.js.
 const img = (name) => `${config.publicUrl}/site/gioi-thieu/${name}`;
@@ -70,12 +72,37 @@ const DU_LICH = {
         "Xã Tuyên Hóa (tỉnh Quảng Trị) hình thành năm 2025 từ việc sáp nhập 4 xã Tiến Hóa, Châu Hóa, Cao Quảng, Văn Hóa; diện tích 194,92 km², dân số khoảng 21.452 người.",
     },
     {
+      id: "song-gianh",
+      icon: "🛶",
+      title: "Sông Gianh",
+      subtitle: "Dòng sông của lễ hội đua thuyền",
+      desc:
+        "Sông Gianh là sông lớn nhất, chảy dọc địa bàn xã — nguồn nước sản xuất, sinh hoạt, tuyến giao thông thủy và không gian của Lễ hội đua thuyền trên sông Gianh (di sản văn hóa phi vật thể quốc gia).",
+    },
+    {
+      id: "nui-da-voi",
+      icon: "⛰️",
+      title: "Núi đá vôi",
+      subtitle: "Lèn Đứt Chân · động Chân Linh · núi Đầu Voi",
+      desc:
+        "Phía Tây Bắc, Tây Nam là các dãy núi, lèn đá vôi nối tiếp nhau thuộc hệ Trường Sơn, tiêu biểu như Lèn Đứt Chân, động Chân Linh, núi Đầu Voi; nhiều thung lũng kín được núi đá che chắn.",
+    },
+    {
+      id: "di-tich",
+      icon: "🏛️",
+      title: "9 di tích xếp hạng",
+      subtitle: "1 quốc gia · 8 cấp tỉnh",
+      desc:
+        "Theo Quyết định 70/QĐ-UBND ngày 12/01/2026 của UBND tỉnh, xã quản lý 9 di tích đã xếp hạng — xem mục \"Di tích lịch sử\" để tra cứu và chỉ đường.",
+      image: `${config.publicUrl}/site/di-tich/le-truc-toan-canh.jpg`,
+    },
+    {
       id: "sinh-thai",
       icon: "🌿",
       title: "Du lịch sinh thái",
       subtitle: "Tiềm năng phát triển",
       desc:
-        "Mật độ dân số thấp (khoảng 110 người/km²), không gian thoáng đãng, quỹ đất dồi dào — phù hợp phát triển nông nghiệp, du lịch sinh thái và khu dân cư mới.",
+        "Mật độ dân số thấp (khoảng 110 người/km²), không gian thoáng đãng, quỹ đất dồi dào; cảnh quan núi non, sông nước là tài nguyên du lịch của xã.",
     },
     {
       id: "dinh-lang",
@@ -94,7 +121,18 @@ const DU_LICH = {
       image: img("ca-tru-kinh-chau.jpg"),
     },
   ],
-  diemThamQuan: [DINH_KINH_CHAU, DINH_UYEN_PHONG],
+  diemThamQuan: [
+    {
+      id: "lang-le-son",
+      icon: "🏞️",
+      title: "Làng Lệ Sơn",
+      desc:
+        "Làng quê đặc trưng giữa thung lũng — núi đá vôi phía sau, sông Gianh phía trước; đầu làng là lèn Đứt Chân với động Chân Linh, cuối làng là núi Đầu Voi. Làng văn vật nổi tiếng với nhiều di tích: Đình làng, Miếu thờ Trần Cảnh Huống, Làng chiến đấu Lệ Sơn.",
+      address: "Xã Văn Hóa (cũ), xã Tuyên Hóa, tỉnh Quảng Trị",
+    },
+    DINH_KINH_CHAU,
+    DINH_UYEN_PHONG,
+  ],
 };
 
 const VAN_HOA = {
@@ -139,6 +177,21 @@ const VAN_HOA = {
     },
   ],
   diSan: [
+    {
+      id: "dua-thuyen",
+      icon: "🛶",
+      title: "Lễ hội đua thuyền trên sông Gianh",
+      subtitle: "Di sản văn hóa phi vật thể quốc gia (QĐ 2180/QĐ-BVHTTDL ngày 27/6/2025)",
+      desc: "Lễ hội truyền thống của vùng Tuyên Hóa và Ba Đồn, diễn ra trên sông Gianh — dòng sông lớn nhất chảy dọc địa bàn xã.",
+    },
+    {
+      id: "le-truc",
+      icon: "🏛️",
+      title: "Mộ và Nhà thờ Đề đốc Lê Trực",
+      subtitle: "Di tích quốc gia (QĐ 774/QĐ-BT ngày 21/6/1993)",
+      desc: "Nơi tưởng niệm Đề đốc Lê Trực, thủ lĩnh nghĩa quân Cần Vương chống Pháp ở Quảng Bình cuối thế kỷ XIX. Cùng 8 di tích cấp tỉnh khác — xem mục \"Di tích lịch sử\".",
+      image: `${config.publicUrl}/site/di-tich/le-truc-toan-canh.jpg`,
+    },
     {
       id: "ca-tru",
       icon: "🎼",

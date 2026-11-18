@@ -9,6 +9,8 @@ const TroCapSchedule = require("../models/TroCapSchedule");
 const LichYTe = require("../models/LichYTe");
 const Notice = require("../models/Notice");
 const Village = require("../models/Village");
+const DiTich = require("../models/DiTich");
+const LanhDao = require("../models/LanhDao");
 const DanSo = require("../models/DanSo");
 const DuLich = require("../models/DuLich");
 const VanHoa = require("../models/VanHoa");
@@ -118,6 +120,24 @@ router.get("/thong-bao", async (req, res) => {
 // ===== Thôn xóm =====
 router.get("/thon-xom", async (req, res) => {
   const items = await Village.find().sort({ thuTu: 1, ten: 1 }).lean();
+  res.json({ items });
+});
+
+// ===== Di tích lịch sử - văn hóa (tra cứu, lọc ?q= theo tên/địa chỉ/mô tả) =====
+router.get("/di-tich", async (req, res) => {
+  const q = String(req.query.q || "").trim();
+  const filter = {};
+  if (q) {
+    const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    filter.$or = [{ ten: regex }, { diaChi: regex }, { tomTat: regex }, { moTa: regex }];
+  }
+  const items = await DiTich.find(filter).sort({ thuTu: 1, ten: 1 }).lean();
+  res.json({ items });
+});
+
+// ===== Lãnh đạo xã (tiện ích "Lãnh đạo xã") =====
+router.get("/lanh-dao", async (req, res) => {
+  const items = await LanhDao.find().sort({ thuTu: 1, hoTen: 1 }).lean();
   res.json({ items });
 });
 

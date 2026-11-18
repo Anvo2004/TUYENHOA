@@ -18,6 +18,8 @@ import ThuTucHanhChinhPage from '@/pages/ThuTucHanhChinhPage'
 import AppLinksPage from '@/pages/AppLinksPage'
 import CongDanPage from '@/pages/CongDanPage'
 import ThonXomPage from '@/pages/ThonXomPage'
+import DiTichPage from '@/pages/DiTichPage'
+import LanhDaoPage from '@/pages/LanhDaoPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +46,8 @@ export default function App() {
                 <Route path="/app-links" element={<AppLinksPage />} />
                 <Route path="/cong-dan" element={<CongDanPage />} />
                 <Route path="/thon-xom" element={<ThonXomPage />} />
+                <Route path="/di-tich" element={<DiTichPage />} />
+                <Route path="/lanh-dao" element={<LanhDaoPage />} />
                 <Route path="/users" element={<UsersPage />} />
                 <Route path="/users/new" element={<UserFormPage />} />
                 <Route path="/users/:id/edit" element={<UserFormPage />} />

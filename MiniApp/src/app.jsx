@@ -27,6 +27,8 @@ import ThongTinUngDungPage from "./pages/thong-tin-ung-dung.jsx";
 import CongDanPage from "./pages/cong-dan.jsx";
 import TichDiemPage from "./pages/tich-diem.jsx";
 import CongDuLieuPage from "./pages/cong-du-lieu.jsx";
+import DiTichPage from "./pages/di-tich.jsx";
+import LanhDaoPage from "./pages/lanh-dao.jsx";
 import { captureReferral } from "./data/citizen.js";
 
 // Mini App mở từ link chia sẻ "/?ref=MÃ" — nhớ mã ngay lúc khởi động, trước khi
@@ -86,6 +88,8 @@ const MyApp = () => {
             <Route path="/cong-dan" element={<CongDanPage />} />
             <Route path="/tich-diem" element={<TichDiemPage />} />
             <Route path="/cong-du-lieu" element={<CongDuLieuPage />} />
+            <Route path="/di-tich" element={<DiTichPage />} />
+            <Route path="/lanh-dao" element={<LanhDaoPage />} />
           </AnimationRoutes>
         </Layout>
       </ZMPRouter>

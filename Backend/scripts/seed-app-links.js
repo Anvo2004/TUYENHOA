@@ -25,7 +25,7 @@ const QUICK_LINKS = [
 ];
 
 const GOV_LINKS = [
-  { icon: "lanh-dao", label: "Lãnh đạo xã", href: "" }, // TODO: trang giới thiệu lãnh đạo xã
+  { icon: "lanh-dao", label: "Lãnh đạo xã", path: "/lanh-dao" },
   { icon: "tro-ly-ai", label: "Trợ lý AI", path: "/tro-ly-so" },
   { icon: "ban-do", label: "Bản đồ số", href: "" }, // TODO: bản đồ số của tỉnh Quảng Trị (.gov.vn)
   { icon: "qr-tai-lieu", label: "QR tài liệu", href: "" }, // TODO
