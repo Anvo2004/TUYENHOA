@@ -3,11 +3,11 @@ import { useLocation } from "react-router-dom";
 import { Sheet } from "zmp-ui";
 import API_BASE_URL from "../data/api-config.js";
 import { ThPage, ThHeader, ThSection, ThChips, ThEmpty, Th3, Ic } from "../components/th/th-ui.jsx";
-import { openDirections } from "../utils/directions.js";
+import { openDirections, embedMapUrl } from "../utils/directions.js";
 
 // Tra cứu Di tích lịch sử: 9 di tích đã xếp hạng giao xã quản lý (collection
 // DiTich, AdminWeb → Di tích lịch sử). Mỗi di tích: tên, mô tả, địa chỉ, đường
-// đến + nút "Chỉ đường" (Google Maps ngoài Zalo). Mở thẳng 1 di tích bằng
+// đến + bản đồ Google nhúng + nút "Chỉ đường" (Google Maps). Mở thẳng 1 di tích bằng
 // /di-tich?id=<_id> (khối Di tích ở màn Văn hóa / Du lịch).
 const norm = (s) =>
   String(s || "")
@@ -73,16 +73,24 @@ export const DiTichDetail = ({ item, onClose }) => (
             ))}
           </>
         )}
-        {item.duongDen && (
-          <>
-            <h3 className="th-dt-detail__h">Đường đến di tích</h3>
-            <p className="th-dt-detail__p">{item.duongDen}</p>
-          </>
-        )}
+        <h3 className="th-dt-detail__h">Đường đến di tích</h3>
+        {item.duongDen && <p className="th-dt-detail__p">{item.duongDen}</p>}
+
+        {/* Bản đồ Google nhúng, ghim vị trí di tích (toạ độ hoặc tên + địa chỉ). */}
+        <div className="th-dt-map">
+          <iframe
+            key={item._id}
+            title={`Bản đồ ${item.ten}`}
+            src={embedMapUrl(item)}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
 
         <button type="button" className="th-btn th-dt-detail__go" onClick={() => openDirections(item)}>
           <Ic n="send" size={17} sw={2.2} />
-          Chỉ đường
+          Chỉ đường bằng Google Maps
         </button>
       </div>
     )}
