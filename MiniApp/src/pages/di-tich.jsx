@@ -44,6 +44,7 @@ export const DiTichDetail = ({ item, onClose }) => (
     {item && (
       <div className="th-sheet th-dt-detail">
         {item.image && <img className="th-dt-detail__img" src={item.image} alt={item.ten} />}
+        {item.image && item.nguonAnh && <p className="th-meta" style={{ margin: "-2px 0 6px", textAlign: "right" }}>Ảnh: {item.nguonAnh}</p>}
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "4px 0 8px" }}>
           <span className={`th-pill ${capPill(item.capDiTich)}`}>Di tích {item.capDiTich.toLowerCase()}</span>
           {item.loaiHinh && <span className="th-pill th-pill--gray">{item.loaiHinh}</span>}

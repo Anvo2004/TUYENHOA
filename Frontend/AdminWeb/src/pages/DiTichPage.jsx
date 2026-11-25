@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 // Tra cứu Di tích lịch sử trên MiniApp (màn /di-tich, khối Di tích ở Văn hóa & Du lịch).
 const EMPTY = {
   ten: '', capDiTich: 'Cấp tỉnh', loaiHinh: 'Lịch sử', quyetDinh: '', diaChi: '', tomTat: '',
-  moTa: '', duongDen: '', lat: '', lng: '', image: '', thuTu: '',
+  moTa: '', duongDen: '', lat: '', lng: '', image: '', nguonAnh: '', thuTu: '',
 }
 const toNum = (v) => (v === '' || v === null || v === undefined || Number.isNaN(Number(v)) ? null : Number(v))
 
@@ -62,7 +62,7 @@ export default function DiTichPage() {
     e.preventDefault()
     if (!form.ten.trim()) return toast.error('Vui lòng nhập tên di tích')
     save.mutate({
-      ...Object.fromEntries(['ten', 'capDiTich', 'loaiHinh', 'quyetDinh', 'diaChi', 'tomTat', 'moTa', 'duongDen', 'image'].map((k) => [k, String(form[k] || '').trim()])),
+      ...Object.fromEntries(['ten', 'capDiTich', 'loaiHinh', 'quyetDinh', 'diaChi', 'tomTat', 'moTa', 'duongDen', 'image', 'nguonAnh'].map((k) => [k, String(form[k] || '').trim()])),
       lat: toNum(form.lat),
       lng: toNum(form.lng),
       thuTu: form.thuTu === '' ? items.length + 1 : Number(form.thuTu),
@@ -103,6 +103,7 @@ export default function DiTichPage() {
               <Label className="text-xs">Ảnh di tích</Label>
               <ImageUploadField value={form.image} onChange={(v) => setForm((f) => ({ ...f, image: v }))} uploadUrl="/api/di-tich/upload" />
             </div>
+            <div className="space-y-1 md:col-span-2"><Label className="text-xs">Nguồn ảnh (hiện dưới ảnh, vd "Báo Quảng Trị")</Label><Input value={form.nguonAnh} onChange={set('nguonAnh')} /></div>
             <div className="md:col-span-2 flex justify-end gap-2">
               <Button type="button" variant="outline" size="sm" onClick={reset}>Huỷ</Button>
               <Button type="submit" size="sm" disabled={save.isPending}>

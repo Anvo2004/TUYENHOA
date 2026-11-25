@@ -9,7 +9,9 @@ const config = require("../config");
 // Toạ độ: hồ sơ ghi sẵn kinh/vĩ độ → dùng nguyên; hồ sơ chỉ có toạ độ VN-2000
 // (bản trích đo địa chính, kinh tuyến trục 106°, múi 3°) → đã đổi sang WGS84.
 // Chùa Lèn Bụt, Mộ và Nhà thờ Đề đốc Lê Trực: hồ sơ không có toạ độ → nút
-// "Chỉ đường" tìm theo tên + địa chỉ. Ảnh: chỉ hồ sơ Lê Trực có ảnh chụp di tích.
+// "Chỉ đường" tìm theo tên + địa chỉ. Ảnh: Lê Trực lấy từ album hồ sơ di tích; Chùa
+// Lèn Bụt, Đền thờ Mai Lượng, Mộ Lê Văn Hành lấy từ bài Báo Quảng Trị (25/11/2026,
+// ghi nguồn ở nguonAnh); các di tích còn lại chưa có ảnh — chờ xã cung cấp.
 const img = (name) => `${config.publicUrl}/site/di-tich/${name}`;
 const OLD = (thon, xa) => `${thon} (xã ${xa} cũ), xã Tuyên Hóa, tỉnh Quảng Trị`;
 
@@ -30,6 +32,7 @@ module.exports = [
     lat: null,
     lng: null,
     image: img("le-truc-toan-canh.jpg"),
+    nguonAnh: "Hồ sơ khoa học di tích",
   },
   {
     ten: "Nhà cụ Lê An và Hang Cây Lội",
@@ -90,7 +93,8 @@ module.exports = [
     duongDen: "Thuộc xã Cao Quảng (cũ), cạnh đường nhựa liên xã, dưới chân lèn đá.",
     lat: null,
     lng: null,
-    image: "",
+    image: img("len-but.jpg"),
+    nguonAnh: "Báo Quảng Trị (QBĐT), 3/2014",
   },
   {
     ten: "Đền thờ Lãnh binh Mai Lượng",
@@ -106,7 +110,8 @@ module.exports = [
       "Từ ngã tư Quảng Thọ (Ba Đồn) theo đường 12 khoảng 5 km, rẽ trái qua cầu Quảng Hải 2, rẽ phải theo đường 559B khoảng 21 km đến km 16 trên địa phận thôn Tân Tiến là đến di tích.",
     lat: 17.761667,
     lng: 106.220833,
-    image: "",
+    image: img("mai-luong.jpg"),
+    nguonAnh: "Báo Quảng Trị (QBĐT), 5/2017",
   },
   {
     ten: "Làng chiến đấu Lệ Sơn",
@@ -153,6 +158,7 @@ module.exports = [
       "Từ Ba Đồn theo đường 12A khoảng 18 km, rẽ trái qua cầu Văn Hóa. Mộ: đi đường bê tông 700 m đến ngã ba, rẽ phải cạnh nghĩa trang liệt sĩ xã Văn Hóa thêm 500 m. Miếu thờ: từ cầu Văn Hóa đi thẳng 800 m, rẽ trái ở ngã tư theo đường bê tông liên thôn khoảng 1,5 km.",
     lat: 17.775833,
     lng: 106.286111,
-    image: "",
+    image: img("le-van-hanh.jpg"),
+    nguonAnh: "Báo Quảng Trị, 11/2024 — ảnh Mộ Lê Văn Hành",
   },
 ].map((d, i) => ({ ...d, thuTu: i + 1 }));

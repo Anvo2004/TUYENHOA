@@ -16,6 +16,7 @@ const diTichSchema = new mongoose.Schema({
   lat: { type: Number, default: null },
   lng: { type: Number, default: null },
   image: { type: String, default: "" },
+  nguonAnh: { type: String, default: "" }, // ghi nguồn ảnh (vd "Báo Quảng Trị") — hiện dưới ảnh
   thuTu: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: null },
