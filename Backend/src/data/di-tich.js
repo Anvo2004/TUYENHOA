@@ -9,9 +9,9 @@ const config = require("../config");
 // Toạ độ: hồ sơ ghi sẵn kinh/vĩ độ → dùng nguyên; hồ sơ chỉ có toạ độ VN-2000
 // (bản trích đo địa chính, kinh tuyến trục 106°, múi 3°) → đã đổi sang WGS84.
 // Chùa Lèn Bụt, Mộ và Nhà thờ Đề đốc Lê Trực: hồ sơ không có toạ độ → nút
-// "Chỉ đường" tìm theo tên + địa chỉ. Ảnh lấy từ chính hồ sơ xã gửi: Lê Trực = ảnh chụp
-// trong album hồ sơ; Lê An, Mai Lượng, Lê Văn Hành = bản vẽ kiến trúc (mặt trước) trong hồ
-// sơ khoa học. 5 di tích còn lại hồ sơ chỉ có văn bản + bản đồ khoanh vùng → chưa có ảnh. KHÔNG dùng ảnh báo chí (Báo Quảng Trị, Báo Văn Hóa... đều ghi "cấm sao chép nếu
+// "Chỉ đường" tìm theo tên + địa chỉ. Ảnh: chỉ Lê Trực có ảnh chụp (album hồ sơ xã gửi);
+// hồ sơ các di tích khác không có ảnh chụp (xã không dùng bản vẽ kiến trúc làm ảnh) → chờ
+// xã chụp và tải lên qua AdminWeb. KHÔNG dùng ảnh báo chí (Báo Quảng Trị, Báo Văn Hóa... đều ghi "cấm sao chép nếu
 // chưa có chấp thuận bằng văn bản") — chờ xã tự chụp hoặc xin phép rồi tải qua AdminWeb.
 const img = (name) => `${config.publicUrl}/site/di-tich/${name}`;
 const OLD = (thon, xa) => `${thon} (xã ${xa} cũ), xã Tuyên Hóa, tỉnh Quảng Trị`;
@@ -49,8 +49,7 @@ module.exports = [
       "Từ Ba Đồn theo đường 12 khoảng 15 km đến địa phận xã Tiến Hóa (cũ); từ hòn Lèn Bảng ở đầu làng rẽ trái khoảng 2 km là đến di tích. Đi đường sông: từ Ba Đồn ngược sông Gianh khoảng 15 km.",
     lat: 17.7875,
     lng: 106.255556,
-    image: img("le-an-ban-ve.jpg"),
-    nguonAnh: "Bản vẽ kiến trúc – hồ sơ khoa học di tích",
+    image: "",
   },
   {
     ten: "Miếu thờ Hiệp biện Đại học sĩ, Thái học đường Trần Cảnh Huống",
@@ -111,8 +110,7 @@ module.exports = [
       "Từ ngã tư Quảng Thọ (Ba Đồn) theo đường 12 khoảng 5 km, rẽ trái qua cầu Quảng Hải 2, rẽ phải theo đường 559B khoảng 21 km đến km 16 trên địa phận thôn Tân Tiến là đến di tích.",
     lat: 17.761667,
     lng: 106.220833,
-    image: img("mai-luong-ban-ve.jpg"),
-    nguonAnh: "Bản vẽ kiến trúc – hồ sơ khoa học di tích",
+    image: "",
   },
   {
     ten: "Làng chiến đấu Lệ Sơn",
@@ -159,7 +157,6 @@ module.exports = [
       "Từ Ba Đồn theo đường 12A khoảng 18 km, rẽ trái qua cầu Văn Hóa. Mộ: đi đường bê tông 700 m đến ngã ba, rẽ phải cạnh nghĩa trang liệt sĩ xã Văn Hóa thêm 500 m. Miếu thờ: từ cầu Văn Hóa đi thẳng 800 m, rẽ trái ở ngã tư theo đường bê tông liên thôn khoảng 1,5 km.",
     lat: 17.775833,
     lng: 106.286111,
-    image: img("le-van-hanh-ban-ve.jpg"),
-    nguonAnh: "Bản vẽ kiến trúc – hồ sơ khoa học di tích",
+    image: "",
   },
 ].map((d, i) => ({ ...d, thuTu: i + 1 }));
